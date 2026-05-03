@@ -1,42 +1,46 @@
-<!DOCTYPE html>
-<html lang="fr">
+<?php
+if (env('APP_DEBUG', false)) {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+}
+// Point d'entrée principal - Logique de connexion
+require_once __DIR__ . '/../bootstrap.php';
+require_alias('@/helpers/db.php');
+require_alias('@/helpers/view.php');
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Le CDN Tailwind : Il fait tout le travail tout seul ! -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Arcanist - B2B</title>
-</head>
+session_start();
 
-<body class="bg-slate-100 flex items-center justify-center h-screen">
+// Redirection si déjà connecté
+if (isset($_SESSION['user_id'])) {
+    header('Location: /pages/dashboard.php');
+    exit;
+}
 
-    <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
-        <h1 class="text-3xl font-bold text-center text-slate-800 mb-6">Arcanist B2B</h1>
+$error = '';
 
-        <form action="#" method="POST" class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium text-slate-700">Email pro</label>
-                <input type="email" class="mt-1 w-full p-2 border border-slate-300 rounded focus:ring-blue-500 focus:border-blue-500">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-slate-700">Mot de passe</label>
-                <input type="password" class="mt-1 w-full p-2 border border-slate-300 rounded focus:ring-blue-500 focus:border-blue-500">
-            </div>
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
 
-            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition">
-                Se connecter
-            </button>
-        </form>
+    $pdo = getDbConnection();
+    // Exclusion des comptes supprimés (soft delete)
+    $stmt = $pdo->prepare('SELECT * FROM clients WHERE email = ? AND deleted_at IS NULL');
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
 
-        <!-- Mode Invité pour les recruteurs -->
-        <div class="mt-6 border-t pt-4">
-            <a href="/shop" class="block w-full text-center border-2 border-green-500 text-green-600 font-bold py-2 px-4 rounded hover:bg-green-50 transition">
-                Accès Démo (Invité)
-            </a>
-        </div>
-    </div>
+    if ($user && password_verify($password, $user['password_hash'])) {
+        session_regenerate_id(true);
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['is_admin'] = $user['is_admin'];
+        $_SESSION['company'] = $user['company_name'];
 
-</body>
+        header('Location: /pages/dashboard.php');
+        exit;
+    } else {
+        $error = "Email ou mot de passe incorrect.";
+    }
+}
 
-</html>
+// Appel de la vue
+render_view('auth/login', ['error' => $error], 'auth');

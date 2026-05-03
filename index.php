@@ -1,10 +1,11 @@
 <?php
+require_once __DIR__ . '/bootstrap.php';
 
 /**
  * Arcane 26.4.2 Microframework
  * Copyright 2017-2026 Joshua Britt
  * MIT License https://arcane.dev
-**/
+ **/
 
 (function () {
   $define['DIR'] = [
@@ -127,11 +128,11 @@
         switch (substr($tag, 3)) {
           case $major:
             list($language, $country) = [$minor, $major];
-          break;
+            break;
 
           case $minor:
             list($language, $country) = [$major, $minor];
-          break;
+            break;
         }
 
         if (str_contains($locale, '+')) {
@@ -230,7 +231,7 @@
     if (SET['ERRORS']) {
       error_reporting(E_ALL);
     } else {
-      error_reporting(E_ALL & ~(E_NOTICE|E_DEPRECATED));
+      error_reporting(E_ALL & ~(E_NOTICE | E_DEPRECATED));
     }
 
     do {
@@ -298,7 +299,8 @@
 
         if (defined('VIEWFILE')) {
           if (!function_exists('php')) {
-            function php($value, $escape = false) {
+            function php($value, $escape = false)
+            {
               if ($escape && $value) {
                 $value = htmlspecialchars($value, ENT_QUOTES);
               }
@@ -308,13 +310,16 @@
           }
 
           eval('?>' . preg_replace(str_replace([
-              '{attribute}', '{variable}', '{allow}', '{argument}'
-            ], [
-              ':\s*=\s*(?P<q>[\'"])(.*?)(?P=q)',
-              '\$[a-z_]\w*(->\w+(\s*\(([^()]|\([^()]*\))*\))?)*',
-              '(?:php|scribe|relay|path|env)',
-              '\(((?:[^()]|\([^()]*\))*)\)'
-            ], [
+            '{attribute}',
+            '{variable}',
+            '{allow}',
+            '{argument}'
+          ], [
+            ':\s*=\s*(?P<q>[\'"])(.*?)(?P=q)',
+            '\$[a-z_]\w*(->\w+(\s*\(([^()]|\([^()]*\))*\))?)*',
+            '(?:php|scribe|relay|path|env)',
+            '\(((?:[^()]|\([^()]*\))*)\)'
+          ], [
             "/<--\s.*?-->/s",
             "/<(if|elseif|foreach)\s+{attribute}\s*>/s",
             "/<\/(if|foreach)>/",
@@ -385,10 +390,12 @@
         if (file_exists($layout)) {
           define('LAYOUTFILE', $layout);
 
-          foreach ([
-            'js' => 'SCRIPTS',
-            'css' => 'STYLES'
-          ] as $extension => $constant) {
+          foreach (
+            [
+              'js' => 'SCRIPTS',
+              'css' => 'STYLES'
+            ] as $extension => $constant
+          ) {
             $assets = array_merge([
               trim(DIR['LAYOUTS'], '/') . ".{$extension}",
               (defined('LAYOUT') ? LAYOUT : SET['LAYOUT']) . ".{$extension}"
@@ -426,23 +433,26 @@
           "/^\h+\</m" => "<",
           "/[^\S ]+\</m" => "<",
           "/\>\s{2,}\</" => "><"
-          ]), $minify, $content);
+        ]), $minify, $content);
       } else {
         return $content;
       }
     });
-      if (defined('LAYOUTFILE')) {
-        extract(HELPERS, EXTR_SKIP);
+    if (defined('LAYOUTFILE')) {
+      extract(HELPERS, EXTR_SKIP);
 
-        require LAYOUTFILE;
-      } else {
+      require LAYOUTFILE;
+    } else {
+      if (defined('CONTENT')) {
         echo CONTENT;
       }
+    }
     ob_end_flush();
   })();
 })();
 
-function env($variable, $default = null) {
+function env($variable, $default = null)
+{
   $variable = getenv($variable) ?: $default;
 
   if (in_array($variable, ['true', 'false', 'null'], true)) {
@@ -452,7 +462,8 @@ function env($variable, $default = null) {
   return $variable;
 }
 
-function path($locator = null, $actual = false) {
+function path($locator = null, $actual = false)
+{
   if (is_null($locator)) {
     return str_replace('//', '/', '/' . implode('/', URI));
   } elseif (is_int($locator)) {
@@ -489,7 +500,8 @@ function path($locator = null, $actual = false) {
   }
 }
 
-function relay($name, $content = null, $define = false) {
+function relay($name, $content = null, $define = false)
+{
   $name = $define ? strtoupper($name) : strtolower($name);
 
   static $bag = [];
@@ -499,7 +511,7 @@ function relay($name, $content = null, $define = false) {
   } else {
     if ($content instanceof closure) {
       ob_start();
-        $content();
+      $content();
       $content = ob_get_clean();
     }
 
@@ -511,7 +523,8 @@ function relay($name, $content = null, $define = false) {
   }
 }
 
-function scribe($string, $replace = []) {
+function scribe($string, $replace = [])
+{
   if (is_array($string)) {
     list($string, $return) = [$string[0], $string[1] ?? ''];
   }
