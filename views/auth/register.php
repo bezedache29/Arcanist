@@ -8,6 +8,7 @@
     <?php endif; ?>
 
     <form action="/pages/auth/register.php" method="POST" class="space-y-4">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
         <div>
             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Nom de l'entreprise</label>
             <input type="text" name="company_name" required class="mt-1 w-full p-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white transition-colors">

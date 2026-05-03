@@ -4,7 +4,7 @@
 function render_view(string $viewPath, array $data = [], ?string $layout = 'app')
 {
     // On extrait les variables pour la vue
-    extract($data);
+    extract($data, EXTR_SKIP);
 
     // 1. On lance l'enregistrement (mise en mémoire tampon)
     ob_start();
@@ -14,7 +14,8 @@ function render_view(string $viewPath, array $data = [], ?string $layout = 'app'
     if (file_exists($realPath)) {
         require $realPath;
     } else {
-        die("Erreur : Le fichier de vue n'existe pas à l'emplacement $realPath");
+        error_log("Vue introuvable: $realPath");
+        die("Erreur : La vue demandée n'existe pas.");
     }
 
     // 2. On coupe l'enregistrement et on crée la fameuse variable $content
@@ -36,7 +37,7 @@ function render_view(string $viewPath, array $data = [], ?string $layout = 'app'
 function render_component(string $componentPath, array $data = [])
 {
     // Transforme le tableau en variables exploitables par le composant
-    extract($data);
+    extract($data, EXTR_SKIP);
 
     // Cherche le composant dans un nouveau dossier views/components/
     $realPath = str_replace('@/', ROOT_PATH . '/', '@/components/' . $componentPath . '.php');

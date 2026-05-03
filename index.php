@@ -443,7 +443,9 @@ require_once __DIR__ . '/bootstrap.php';
 
       require LAYOUTFILE;
     } else {
-      echo CONTENT;
+      if (defined('CONTENT')) {
+        echo CONTENT;
+      }
     }
     ob_end_flush();
   })();

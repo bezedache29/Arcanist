@@ -48,7 +48,7 @@ $isShop = strpos($currentUri, 'shop.php') !== false;
         }
     </script>
 
-    <title><?= $title ?? 'Arcanist B2B' ?></title>
+    <title><?= htmlspecialchars($title ?? 'Arcanist B2B', ENT_QUOTES, 'UTF-8') ?></title>
 </head>
 
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-200 min-h-screen">
