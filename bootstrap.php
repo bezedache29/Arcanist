@@ -1,5 +1,4 @@
 <?php
-// bootstrap.php
 
 // 1. On définit la racine du projet comme constante globale
 define('ROOT_PATH', __DIR__);

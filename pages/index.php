@@ -4,7 +4,7 @@ if (env('APP_DEBUG', false)) {
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 }
-// Point d'entrée principal - Logique de connexion
+
 require_once __DIR__ . '/../bootstrap.php';
 require_alias('@/helpers/db.php');
 require_alias('@/helpers/view.php');
@@ -42,5 +42,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Appel de la vue
 render_view('auth/login', ['error' => $error], 'auth');

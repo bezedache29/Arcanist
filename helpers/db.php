@@ -1,5 +1,4 @@
 <?php
-// helpers/db.php
 
 function getDbConnection()
 {

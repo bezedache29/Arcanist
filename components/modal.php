@@ -1,13 +1,11 @@
 <?php
-// views/components/modal.php
 
-// Valeurs par defaut si on oublie de passer un parametre
 $id = $id ?? 'modal';
 $title = $title ?? 'Confirmation';
 $body = $body ?? 'Êtes-vous sûr de vouloir continuer ?';
 $actionText = $actionText ?? 'Confirmer';
 $actionUrl = $actionUrl ?? '#';
-$theme = $theme ?? 'primary'; // 'primary' ou 'danger'
+$theme = $theme ?? 'primary';
 
 // Application des couleurs et de l'icone selon le theme
 if ($theme === 'danger') {
