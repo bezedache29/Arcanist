@@ -65,8 +65,8 @@
                             </span>
                         </td>
                         <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                            <a href="/pages/admin/products/products_edit.php?id=<?= $product['id'] ?>" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-4">Modifier</a>
-                            <button onclick="openDeleteModal(<?= $product['id'] ?>)" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300">Supprimer</button>
+                            <a href="/pages/admin/products/products_edit.php?id=<?= (int)$product['id'] ?>" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-4">Modifier</a>
+                            <button onclick="openDeleteModal(<?= (int)$product['id'] ?>)" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300">Supprimer</button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -75,20 +75,26 @@
     </table>
 </div>
 
+<!-- Appel de la modale en activant le mode POST -->
 <?php render_component('modal', [
     'id' => 'deleteProductModal',
     'title' => 'Supprimer le produit',
     'body' => 'Êtes-vous sûr de vouloir retirer ce produit du catalogue ? Il ne sera plus visible par les clients.',
     'actionText' => 'Supprimer',
-    'actionUrl' => '#',
-    'theme' => 'danger'
+    'actionUrl' => '/pages/admin/products/products_delete.php',
+    'theme' => 'danger',
+    'isPost' => true, // On active le mode formulaire
+    'csrfToken' => $_SESSION['csrf_token'] ?? ''
 ]); ?>
 
 <script>
     function openDeleteModal(productId) {
         const modal = document.getElementById('deleteProductModal');
-        const confirmBtn = modal.querySelector('a');
-        confirmBtn.href = '/pages/admin/products/products_delete.php?id=' + productId;
+        // On injecte l'ID du produit dans l'input cache genere par le composant
+        const hiddenIdInput = document.getElementById('deleteProductModal-target-id');
+        if (hiddenIdInput) {
+            hiddenIdInput.value = productId;
+        }
         modal.classList.remove('hidden');
     }
 </script>

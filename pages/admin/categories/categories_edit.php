@@ -41,15 +41,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $name = trim($_POST['name'] ?? '');
 
-        if (empty($name)) {
+        if (empty($name) || mb_strlen($name) > 100) {
             $error = "Le nom de la catégorie est obligatoire.";
         } else {
-            // Mise a jour en base
-            $stmt = $pdo->prepare('UPDATE categories SET name = ? WHERE id = ?');
-            $stmt->execute([$name, $id]);
+            try {
+                $stmt = $pdo->prepare('UPDATE categories SET name = ? WHERE id = ?');
+                $stmt->execute([$name, $id]);
 
-            header('Location: /pages/admin/categories/categories.php');
-            exit;
+                unset($_SESSION['csrf_token']);
+                header('Location: /pages/admin/categories/categories.php');
+                exit;
+            } catch (PDOException $e) {
+                error_log('[categories_edit] ' . $e->getMessage());
+                $error = "Impossible de mettre à jour la catégorie.";
+            }
         }
     }
 }

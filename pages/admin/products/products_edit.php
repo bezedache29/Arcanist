@@ -30,6 +30,15 @@ if (!$product) {
     exit;
 }
 
+// Recuperation des categories actives et construction de la whitelist AVANT le POST
+$stmtCats = $pdo->query('SELECT * FROM categories WHERE deleted_at IS NULL ORDER BY name ASC');
+$categories = $stmtCats->fetchAll();
+
+$categoriesById = [];
+foreach ($categories as $cat) {
+    $categoriesById[(int)$cat['id']] = true;
+}
+
 // 3. Traitement du formulaire POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $csrfToken = $_POST['csrf_token'] ?? '';
@@ -40,12 +49,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $name = trim($_POST['name'] ?? '');
         $description = trim($_POST['description'] ?? '');
-        $price = filter_var($_POST['price'] ?? 0, FILTER_VALIDATE_FLOAT);
-        $stock = filter_var($_POST['stock'] ?? 0, FILTER_VALIDATE_INT);
+        $price = filter_var($_POST['price'] ?? null, FILTER_VALIDATE_FLOAT);
+        $stock = filter_var($_POST['stock'] ?? null, FILTER_VALIDATE_INT);
         $categoryIds = $_POST['category_ids'] ?? [];
 
-        if (empty($name) || $price === false || $stock === false) {
-            $error = "Veuillez remplir correctement tous les champs obligatoires.";
+        if (
+            empty($name) ||
+            $price === false || $price === null || $price < 0 ||
+            $stock === false || $stock === null || $stock < 0
+        ) {
+            $error = "Veuillez remplir correctement tous les champs obligatoires (prix et stock positifs).";
         } else {
             try {
                 $pdo->beginTransaction();
@@ -58,19 +71,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmtDeletePivot = $pdo->prepare('DELETE FROM category_product WHERE product_id = ?');
                 $stmtDeletePivot->execute([$id]);
 
-                // Puis on insere les nouvelles liaisons si des categories ont ete cochees
+                // Puis on insere les nouvelles liaisons via la whitelist
                 if (!empty($categoryIds) && is_array($categoryIds)) {
                     $stmtInsertPivot = $pdo->prepare('INSERT INTO category_product (product_id, category_id) VALUES (?, ?)');
                     foreach ($categoryIds as $catId) {
-                        $stmtInsertPivot->execute([$id, (int)$catId]);
+                        $catIdInt = (int)$catId;
+                        if (isset($categoriesById[$catIdInt])) {
+                            $stmtInsertPivot->execute([$id, $catIdInt]);
+                        }
                     }
                 }
 
                 $pdo->commit();
+
+                // Destruction du jeton CSRF pour eviter le replay
+                unset($_SESSION['csrf_token']);
+
                 header('Location: /pages/admin/products/products.php');
                 exit;
             } catch (Exception $e) {
-                $pdo->rollBack();
+                // Securisation du rollback
+                if ($pdo->inTransaction()) {
+                    $pdo->rollBack();
+                }
+                error_log("Erreur lors de la modification du produit : " . $e->getMessage());
                 $error = "Une erreur est survenue lors de la mise à jour.";
             }
         }
@@ -81,10 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
-
-// Recuperation de toutes les categories pour l'affichage
-$stmtCats = $pdo->query('SELECT * FROM categories WHERE deleted_at IS NULL ORDER BY name ASC');
-$categories = $stmtCats->fetchAll();
 
 // Recuperation des ID des categories actuelles du produit pour pre-cocher les cases
 $stmtCurrentCats = $pdo->prepare('SELECT category_id FROM category_product WHERE product_id = ?');

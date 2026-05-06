@@ -21,15 +21,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $name = trim($_POST['name'] ?? '');
 
-        if (empty($name)) {
+        if (empty($name) || mb_strlen($name) > 100) {
             $error = "Le nom de la catégorie est obligatoire.";
         } else {
-            $pdo = getDbConnection();
-            $stmt = $pdo->prepare('INSERT INTO categories (name) VALUES (?)');
-            $stmt->execute([$name]);
+            try {
+                $pdo = getDbConnection();
+                $stmt = $pdo->prepare('INSERT INTO categories (name) VALUES (?)');
+                $stmt->execute([$name]);
 
-            header('Location: /pages/admin/categories/categories.php');
-            exit;
+                unset($_SESSION['csrf_token']); // empêche le rejeu
+                header('Location: /pages/admin/categories/categories.php');
+                exit;
+            } catch (PDOException $e) {
+                $error = "Impossible de créer la catégorie (nom déjà utilisé ?).";
+            }
         }
     }
 }
