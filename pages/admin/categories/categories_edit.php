@@ -41,8 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $name = trim($_POST['name'] ?? '');
 
-        if (empty($name) || mb_strlen($name) > 100) {
+        if (empty($name)) {
             $error = "Le nom de la catégorie est obligatoire.";
+        } elseif (mb_strlen($name) > 100) {
+            $error = "Le nom de la catégorie ne doit pas dépasser 100 caractères.";
         } else {
             try {
                 $stmt = $pdo->prepare('UPDATE categories SET name = ? WHERE id = ?');
