@@ -1,5 +1,4 @@
 <?php
-// pages/logout.php
 session_start();
 // Vider toutes les variables de session
 $_SESSION = [];

@@ -1,5 +1,4 @@
 <?php
-// pages/dashboard.php
 require_once __DIR__ . '/../bootstrap.php';
 require_alias('@/helpers/db.php');
 require_alias('@/helpers/view.php');
