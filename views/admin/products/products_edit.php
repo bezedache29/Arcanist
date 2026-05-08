@@ -23,13 +23,32 @@
             </div>
         <?php endif; ?>
 
-        <form action="/pages/admin/products/products_edit.php?id=<?= $product['id'] ?>" method="POST" class="space-y-6">
+        <form action="/pages/admin/products/products_edit.php?id=<?= $product['id'] ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
 
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
             <div>
                 <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Nom du produit <span class="text-red-500">*</span></label>
                 <input type="text" name="name" id="name" value="<?= htmlspecialchars($product['name']) ?>" required class="mt-1 block w-full rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 py-2 px-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 text-slate-900 dark:text-white transition-colors">
+            </div>
+
+            <div>
+                <label for="image-input" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Image du produit</label>
+                <div class="mt-2 flex items-center gap-6">
+                    <div id="preview-container" class="<?= empty($product['image_path']) ? 'hidden' : '' ?> shrink-0">
+                        <img id="image-preview" src="<?= htmlspecialchars($product['image_path'] ?? '#') ?>" alt="Aperçu" class="h-24 w-24 object-cover rounded-lg ring-1 ring-slate-200 dark:ring-slate-700 shadow-sm">
+                    </div>
+                    <div id="preview-placeholder" class="<?= !empty($product['image_path']) ? 'hidden' : '' ?> shrink-0 h-24 w-24 flex items-center justify-center rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-600 text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-slate-800/50 transition-colors">
+                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+
+                    <div class="flex-1">
+                        <input type="file" name="image" id="image-input" accept="image/jpeg, image/png, image/webp" class="block w-full text-sm text-slate-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900/30 dark:file:text-blue-400 dark:hover:file:bg-blue-900/50 transition-colors cursor-pointer">
+                        <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Formats acceptés : JPG, PNG, WEBP. Laissez vide pour conserver l'image actuelle.</p>
+                    </div>
+                </div>
             </div>
 
             <div>
@@ -81,3 +100,62 @@
 
     </div>
 </div>
+
+<?php render_component('modal', [
+    'id' => 'imageSizeErrorModal',
+    'title' => 'Fichier trop lourd',
+    'body' => 'L\'image sélectionnée dépasse la limite de 2 Mo. Veuillez choisir un fichier plus léger pour optimiser les performances.',
+    'actionText' => 'Compris',
+    'actionUrl' => '#',
+    'theme' => 'danger'
+]); ?>
+
+<script>
+    document.getElementById('image-input').addEventListener('change', function(evt) {
+        const file = evt.target.files[0];
+        const preview = document.getElementById('image-preview');
+        const container = document.getElementById('preview-container');
+        const placeholder = document.getElementById('preview-placeholder');
+        const errorModal = document.getElementById('imageSizeErrorModal');
+
+        // On sauvegarde l'état initial (pour pouvoir y revenir en cas d'erreur)
+        // Pour l'edit, src contient déjà l'image de la BDD
+        const originalSrc = preview.src;
+        const wasHidden = container.classList.contains('hidden');
+
+        if (file) {
+            const maxSize = 2 * 1024 * 1024;
+
+            if (file.size > maxSize) {
+                // Affichage de la modale custom
+                errorModal.classList.remove('hidden');
+
+                // Réinitialisation du champ de fichier
+                this.value = '';
+
+                // RESTAURATION : On remet l'aperçu comme il était avant la sélection
+                if (wasHidden) {
+                    container.classList.add('hidden');
+                    if (placeholder) placeholder.classList.remove('hidden');
+                } else {
+                    preview.src = originalSrc;
+                }
+                return;
+            }
+
+            // Si tout est OK, on génère l'aperçu du nouveau fichier
+            preview.src = URL.createObjectURL(file);
+            container.classList.remove('hidden');
+            if (placeholder) placeholder.classList.add('hidden');
+        }
+    });
+
+    // Gestion de la fermeture de la modale d'erreur
+    const modal = document.getElementById('imageSizeErrorModal');
+    const closeBtn = modal.querySelector('a'); // Le bouton "Compris"
+
+    closeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        modal.classList.add('hidden');
+    });
+</script>
