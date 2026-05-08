@@ -49,97 +49,100 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stock = filter_var($_POST['stock'] ?? null, FILTER_VALIDATE_INT);
         $categoryIds = $_POST['category_ids'] ?? [];
 
-        // Gestion de l'image (on garde l'ancienne par defaut)
-        $imagePath = $product['image_path'];
-        $uploadOk = true;
+        // 1. VALIDATION MÉTIER EN PREMIER
+        if (
+            empty($name) ||
+            $price === false || $price === null || $price < 0 ||
+            $stock === false || $stock === null || $stock < 0
+        ) {
+            $error = "Veuillez remplir correctement tous les champs obligatoires (prix et stock positifs).";
+        } else {
+            // 2. GESTION DE L'IMAGE ENSUITE
+            $imagePath = $product['image_path']; // On garde l'ancienne par defaut
+            $uploadOk = true;
+            $destination = null; // Declare pour le nettoyage dans le catch
 
-        if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
-            if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-                $error = "Erreur lors du transfert de l'image.";
-                $uploadOk = false;
-            } else {
-                $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
-                $fileTmpPath = $_FILES['image']['tmp_name'];
-                $fileMimeType = mime_content_type($fileTmpPath);
-                $fileSize = $_FILES['image']['size'];
-                $maxSize = 2 * 1024 * 1024;
-
-                if (!in_array($fileMimeType, $allowedMimeTypes)) {
-                    $error = "Le format de l'image n'est pas autorisé (JPG, PNG ou WEBP uniquement).";
-                    $uploadOk = false;
-                } elseif ($fileSize > $maxSize) {
-                    $error = "L'image ne doit pas dépasser 2 Mo.";
+            if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+                if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+                    $error = "Erreur lors du transfert de l'image.";
                     $uploadOk = false;
                 } else {
-                    $uploadDir = __DIR__ . '/../../../public/uploads/products/';
-                    if (!is_dir($uploadDir)) {
-                        mkdir($uploadDir, 0755, true);
-                    }
+                    $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+                    $fileTmpPath = $_FILES['image']['tmp_name'];
+                    $fileMimeType = mime_content_type($fileTmpPath);
+                    $fileSize = $_FILES['image']['size'];
+                    $maxSize = 2 * 1024 * 1024;
 
-                    $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-                    $baseName = uniqid('prod_') . '_' . bin2hex(random_bytes(4));
-
-                    // Verification : Est-ce que PHP GD est installe ?
-                    if (extension_loaded('gd') && function_exists('imagecreatefrompng')) {
-                        $newFileName = $baseName . '.webp';
-                        $destination = $uploadDir . $newFileName;
-
-                        $sourceImage = null;
-                        if ($fileMimeType === 'image/jpeg') {
-                            $sourceImage = @imagecreatefromjpeg($fileTmpPath);
-                        } elseif ($fileMimeType === 'image/png') {
-                            $sourceImage = @imagecreatefrompng($fileTmpPath);
-                            if ($sourceImage) {
-                                imagepalettetotruecolor($sourceImage);
-                                imagealphablending($sourceImage, true);
-                                imagesavealpha($sourceImage, true);
-                            }
-                        } elseif ($fileMimeType === 'image/webp') {
-                            $sourceImage = @imagecreatefromwebp($fileTmpPath);
+                    if (!in_array($fileMimeType, $allowedMimeTypes)) {
+                        $error = "Le format de l'image n'est pas autorisé (JPG, PNG ou WEBP uniquement).";
+                        $uploadOk = false;
+                    } elseif ($fileSize > $maxSize) {
+                        $error = "L'image ne doit pas dépasser 2 Mo.";
+                        $uploadOk = false;
+                    } else {
+                        $uploadDir = __DIR__ . '/../../../public/uploads/products/';
+                        if (!is_dir($uploadDir)) {
+                            mkdir($uploadDir, 0755, true);
                         }
 
-                        if ($sourceImage) {
-                            if (imagewebp($sourceImage, $destination, 80)) {
-                                if (!empty($product['image_path']) && file_exists(__DIR__ . '/../../..' . $product['image_path'])) {
-                                    @unlink(__DIR__ . '/../../..' . $product['image_path']);
+                        // Deduction securisee de l'extension
+                        $mimeTypesMap = [
+                            'image/jpeg' => 'jpg',
+                            'image/png'  => 'png',
+                            'image/webp' => 'webp'
+                        ];
+                        $extension = $mimeTypesMap[$fileMimeType] ?? 'jpg';
+                        $baseName = uniqid('prod_') . '_' . bin2hex(random_bytes(4));
+
+                        // Verification de la librairie GD
+                        if (extension_loaded('gd') && function_exists('imagecreatefrompng')) {
+                            $newFileName = $baseName . '.webp';
+                            $destination = $uploadDir . $newFileName;
+
+                            $sourceImage = null;
+                            if ($fileMimeType === 'image/jpeg') {
+                                $sourceImage = @imagecreatefromjpeg($fileTmpPath);
+                            } elseif ($fileMimeType === 'image/png') {
+                                $sourceImage = @imagecreatefrompng($fileTmpPath);
+                                if ($sourceImage) {
+                                    imagepalettetotruecolor($sourceImage);
+                                    imagealphablending($sourceImage, true);
+                                    imagesavealpha($sourceImage, true);
                                 }
-                                $imagePath = '/public/uploads/products/' . $newFileName;
+                            } elseif ($fileMimeType === 'image/webp') {
+                                $sourceImage = @imagecreatefromwebp($fileTmpPath);
+                            }
+
+                            if ($sourceImage) {
+                                if (imagewebp($sourceImage, $destination, 80)) {
+                                    $imagePath = '/public/uploads/products/' . $newFileName;
+                                } else {
+                                    $error = "Erreur lors de la compression de l'image.";
+                                    $uploadOk = false;
+                                }
+                                imagedestroy($sourceImage);
                             } else {
-                                $error = "Erreur lors de la compression de l'image.";
+                                $error = "Le fichier image est corrompu ou illisible.";
                                 $uploadOk = false;
                             }
-                            imagedestroy($sourceImage);
                         } else {
-                            $error = "Le fichier image est corrompu ou illisible.";
-                            $uploadOk = false;
-                        }
-                    } else {
-                        // Fallback : Sauvegarde classique sans compression
-                        $newFileName = $baseName . '.' . $extension;
-                        $destination = $uploadDir . $newFileName;
+                            // Fallback classique
+                            $newFileName = $baseName . '.' . $extension;
+                            $destination = $uploadDir . $newFileName;
 
-                        if (move_uploaded_file($fileTmpPath, $destination)) {
-                            if (!empty($product['image_path']) && file_exists(__DIR__ . '/../../..' . $product['image_path'])) {
-                                @unlink(__DIR__ . '/../../..' . $product['image_path']);
+                            if (move_uploaded_file($fileTmpPath, $destination)) {
+                                $imagePath = '/public/uploads/products/' . $newFileName;
+                            } else {
+                                $error = "Erreur lors de la sauvegarde de l'image sur le serveur.";
+                                $uploadOk = false;
                             }
-                            $imagePath = '/public/uploads/products/' . $newFileName;
-                        } else {
-                            $error = "Erreur lors de la sauvegarde de l'image sur le serveur.";
-                            $uploadOk = false;
                         }
                     }
                 }
             }
-        }
 
-        if ($uploadOk) {
-            if (
-                empty($name) ||
-                $price === false || $price === null || $price < 0 ||
-                $stock === false || $stock === null || $stock < 0
-            ) {
-                $error = "Veuillez remplir correctement tous les champs obligatoires (prix et stock positifs).";
-            } else {
+            // 3. MISE A JOUR EN BASE DE DONNEES
+            if ($uploadOk) {
                 try {
                     $pdo->beginTransaction();
 
@@ -160,6 +163,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
 
                     $pdo->commit();
+
+                    // NETTOYAGE POST-COMMIT : On supprime l'ancienne image seulement si l'upload et la BDD ont reussi
+                    if ($imagePath !== $product['image_path'] && !empty($product['image_path'])) {
+                        $oldFilePath = __DIR__ . '/../../..' . $product['image_path'];
+                        if (file_exists($oldFilePath)) {
+                            @unlink($oldFilePath);
+                        }
+                    }
+
                     unset($_SESSION['csrf_token']);
 
                     header('Location: /pages/admin/products/products.php');
@@ -168,6 +180,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($pdo->inTransaction()) {
                         $pdo->rollBack();
                     }
+
+                    // NETTOYAGE EN CAS D'ERREUR BDD : On supprime la nouvelle image pour ne pas laisser de fichier orphelin
+                    if ($destination && file_exists($destination)) {
+                        @unlink($destination);
+                    }
+
                     error_log("Erreur lors de la modification du produit : " . $e->getMessage());
                     $error = "Une erreur est survenue lors de la mise à jour.";
                 }
