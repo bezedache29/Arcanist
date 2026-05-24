@@ -2,6 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+# Instructions pour Claude
+
+- Réponds toujours en français dans le chat.
+- Les commentaires dans le code doivent être en français.
+- Les tests et le code lui-même doivent être écrits en anglais.
+
 ## Project Overview
 
 Arcanist is a PHP 8.2 B2B e-commerce application (product catalog for professionals). It runs on Apache via Docker, with MySQL 8.4, and uses Tailwind CSS for styling.
@@ -9,6 +15,7 @@ Arcanist is a PHP 8.2 B2B e-commerce application (product catalog for profession
 ## Development Environment
 
 Start the full stack:
+
 ```bash
 docker compose up -d
 ```
@@ -16,6 +23,7 @@ docker compose up -d
 The app is served by Traefik at `https://arcanist.localhost`. phpMyAdmin is at `https://pma-arcanist.localhost`. The MySQL port is forwarded to `3307` locally.
 
 Import/reset the database schema:
+
 ```bash
 docker compose exec arcanist.app bash -c "mysql -h mysql -u sail -ppassword arcanist_db < /var/www/html/database.sql"
 ```
@@ -31,6 +39,7 @@ There are no automated tests. Verify changes manually via the browser.
 The app is a hybrid: the Arcane microframework (`index.php`) handles the root URL, but most pages are accessed **directly** by their file path (e.g. `/pages/dashboard.php`). Apache rewrites unmatched requests to `index.php`, but actual `.php` files in `pages/` are served directly and act as controllers.
 
 Each page controller follows this pattern:
+
 1. `require_once __DIR__ . '/../../bootstrap.php'` (adjust depth as needed)
 2. `require_alias('@/helpers/db.php')` and `require_alias('@/helpers/view.php')`
 3. `session_start()`
@@ -54,6 +63,7 @@ Each page controller follows this pattern:
 ### Path Alias
 
 `@/` is an alias for the project root (defined in `bootstrap.php`):
+
 ```php
 require_alias('@/helpers/db.php');  // loads helpers/db.php
 ```
@@ -74,6 +84,7 @@ Auth uses `password_hash()` / `password_verify()`. Session stores `user_id`, `is
 ### UI and Styling
 
 Tailwind is loaded via CDN in layouts (dark mode: `class` strategy). The local `tailwind.config.js` defines two custom color palettes:
+
 - `arcane-*`: dark purple (backgrounds, cards, borders)
 - `mystic-*`: gold (buttons, accents, prices)
 

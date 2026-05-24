@@ -95,11 +95,11 @@
                 <p class="mt-4 text-mystic-900/60 dark:text-mystic-100/60">Utilisation des composants natifs du framework Arcane.</p>
             </div>
 
-            <button id="theme-toggle" class="p-3 rounded-xl bg-arcane-800 border border-arcane-700 hover:border-mystic-500 transition-all shadow-lg group">
-                <svg id="theme-toggle-dark-icon" class="hidden w-6 h-6 text-mystic-600 group-hover:text-mystic-500" fill="currentColor" viewBox="0 0 20 20">
+            <button id="theme-toggle" type="button" aria-label="Basculer le thème" aria-pressed="false" class="p-3 rounded-xl bg-arcane-800 border border-arcane-700 hover:border-mystic-500 transition-all shadow-lg group">
+                <svg id="theme-toggle-dark-icon" aria-hidden="true" class="hidden w-6 h-6 text-mystic-600 group-hover:text-mystic-500" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                 </svg>
-                <svg id="theme-toggle-light-icon" class="hidden w-6 h-6 text-mystic-500 group-hover:text-mystic-400" fill="currentColor" viewBox="0 0 20 20">
+                <svg id="theme-toggle-light-icon" aria-hidden="true" class="hidden w-6 h-6 text-mystic-500 group-hover:text-mystic-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
                 </svg>
             </button>
@@ -201,9 +201,11 @@
 
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             html.classList.add('dark');
+            themeToggleBtn.setAttribute('aria-pressed', 'true');
             lightIcon.classList.remove('hidden');
         } else {
             html.classList.remove('dark');
+            themeToggleBtn.setAttribute('aria-pressed', 'false');
             darkIcon.classList.remove('hidden');
         }
 
@@ -214,9 +216,11 @@
             if (html.classList.contains('dark')) {
                 html.classList.remove('dark');
                 localStorage.setItem('color-theme', 'light');
+                themeToggleBtn.setAttribute('aria-pressed', 'false');
             } else {
                 html.classList.add('dark');
                 localStorage.setItem('color-theme', 'dark');
+                themeToggleBtn.setAttribute('aria-pressed', 'true');
             }
         });
     </script>

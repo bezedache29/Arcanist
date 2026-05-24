@@ -67,10 +67,10 @@ $isShop = strpos($currentUri, 'shop.php') !== false;
 
                     <!-- Liens Desktop (Caches sur mobile) -->
                     <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-                        <a href="/pages/dashboard.php" class="<?= $isDashboard ? 'border-blue-500 text-slate-900 dark:text-white' : 'border-transparent text-slate-500 dark:text-slate-400 hover:border-slate-300 hover:text-slate-700 dark:hover:text-slate-300' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium transition-colors">
+                        <a href="/pages/dashboard.php" class="<?= $isDashboard ? 'border-blue-500 dark:text-white' : 'border-transparent text-slate-500 dark:text-slate-400 hover:border-slate-300 hover:text-slate-700 dark:hover:text-slate-300' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium transition-colors">
                             Dashboard
                         </a>
-                        <a href="/pages/shop.php" class="<?= $isShop ? 'border-blue-500 text-slate-900 dark:text-white' : 'border-transparent text-slate-500 dark:text-slate-400 hover:border-slate-300 hover:text-slate-700 dark:hover:text-slate-300' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium transition-colors">
+                        <a href="/pages/shop.php" class="<?= $isShop ? 'border-blue-500 text-slate-900 dark:text-white' : 'border-transparent dark:text-slate-400 hover:border-slate-300 hover:text-slate-700 dark:hover:text-slate-300' ?> inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium transition-colors">
                             Catalogue
                         </a>
                     </div>
@@ -137,10 +137,10 @@ $isShop = strpos($currentUri, 'shop.php') !== false;
         <!-- Le Menu Mobile qui s'ouvre au clic -->
         <div class="sm:hidden hidden" id="mobile-menu">
             <div class="space-y-1 pb-3 pt-2">
-                <a href="/pages/dashboard.php" class="<?= $isDashboard ? 'bg-blue-50 dark:bg-blue-900/50 border-blue-500 text-blue-700 dark:text-blue-400' : 'border-transparent text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium transition-colors">
+                <a href="/pages/dashboard.php" class="<?= $isDashboard ? 'bg-blue-50 dark:bg-blue-900/50 border-blue-500 text-blue-700 dark:text-blue-400' : 'border-transparent dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium transition-colors">
                     Dashboard
                 </a>
-                <a href="/pages/shop.php" class="<?= $isShop ? 'bg-blue-50 dark:bg-blue-900/50 border-blue-500 text-blue-700 dark:text-blue-400' : 'border-transparent text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium transition-colors">
+                <a href="/pages/shop.php" class="<?= $isShop ? 'bg-blue-50 dark:bg-blue-900/50 border-blue-500 text-blue-700 dark:text-blue-400' : 'border-transparent dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600' ?> block border-l-4 py-2 pl-3 pr-4 text-base font-medium transition-colors">
                     Catalogue
                 </a>
             </div>
