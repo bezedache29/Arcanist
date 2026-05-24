@@ -31,4 +31,10 @@
             Accès Démo (Invité)
         </a>
     </div>
+
+    <div class="mt-3">
+        <a href="/pages/styleguide.php" class="block w-full text-center border border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400 text-sm py-2 px-4 rounded hover:bg-slate-50 dark:hover:bg-slate-700/50 transition">
+            Design System
+        </a>
+    </div>
 </div>
