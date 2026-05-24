@@ -119,7 +119,7 @@
         </section>
 
         <section>
-            <h2 class="font-ui text-xs font-bold uppercase tracking-widest text-arcane-500 mb-6">Actions & Boutons</h2>
+            <h2 class="font-grimoire text-xs font-bold uppercase tracking-widest text-arcane-500 mb-6">Actions & Boutons</h2>
             <div class="flex flex-wrap gap-6 bg-arcane-800 p-8 rounded-2xl border border-arcane-700 shadow-md">
                 <?php render_component('button', ['label' => 'Ajouter au panier', 'variant' => 'primary']); ?>
                 <?php render_component('button', ['label' => 'Gérer le stock', 'variant' => 'secondary']); ?>
@@ -129,7 +129,7 @@
         </section>
 
         <section>
-            <h2 class="font-ui text-xs font-bold uppercase tracking-widest text-arcane-500 mb-6">Composants Modales</h2>
+            <h2 class="font-grimoire text-xs font-bold uppercase tracking-widest text-arcane-500 mb-6">Composants Modales</h2>
             <div class="flex flex-wrap gap-6 bg-arcane-800 p-8 rounded-2xl border border-arcane-700 shadow-md">
                 <?php render_component('button', [
                     'label' => 'Ouvrir Confirmation',
@@ -167,7 +167,7 @@
         </section>
 
         <section>
-            <h2 class="font-ui text-xs font-bold uppercase tracking-widest text-arcane-500 mb-6">Composants Formulaire</h2>
+            <h2 class="font-grimoire text-xs font-bold uppercase tracking-widest text-arcane-500 mb-6">Composants Formulaire</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 bg-arcane-800 p-8 rounded-2xl border border-arcane-700 shadow-md">
                 <?php render_component('input', ['label' => 'Nom de l\'artefact', 'name' => 'name', 'placeholder' => 'Ex: Grimoire...', 'required' => true]); ?>
                 <?php render_component('input', ['type' => 'number', 'label' => 'Prix HT', 'name' => 'price', 'value' => '24.50']); ?>
@@ -178,7 +178,7 @@
         </section>
 
         <section>
-            <h2 class="font-ui text-xs font-bold uppercase tracking-widest text-arcane-500 mb-6">Composant Carte</h2>
+            <h2 class="font-grimoire text-xs font-bold uppercase tracking-widest text-arcane-500 mb-6">Composant Carte</h2>
             <div class="max-w-sm">
                 <?php render_component('card', [
                     'title'   => 'Aethérium Brut',

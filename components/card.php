@@ -47,7 +47,7 @@ $priceTTC = $priceHT * $tva;
 
         <?php render_component('button', [
             'type' => 'a',
-            'href' => htmlspecialchars($url, ENT_QUOTES, 'UTF-8'),
+            'href' => $url,
             'label' => 'Détails du produit',
             'variant' => 'secondary',
             'size' => 'sm',
