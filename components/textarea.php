@@ -21,7 +21,7 @@ $error = $error ?? '';
 $extraClass = $extraClass ?? '';
 
 // Base des styles
-$baseInputClass = "w-full bg-arcane-900/50 text-mystic-900 dark:text-mystic-100 border rounded-lg px-4 py-2.5 font-ui transition-all duration-300 focus:outline-none focus:ring-1 placeholder-mystic-900/30 dark:placeholder-mystic-100/30";
+$baseInputClass = "w-full bg-arcane-900 dark:bg-arcane-700 text-mystic-900 dark:text-mystic-100 border rounded-lg px-4 py-2.5 font-ui transition-all duration-300 focus:outline-none focus:ring-1 placeholder-mystic-900/30 dark:placeholder-mystic-100/30";
 
 // Gestion du style selon l'état (Normal vs Erreur)
 if (!empty($error)) {
@@ -34,7 +34,7 @@ if (!empty($error)) {
 
 <div class="flex flex-col gap-1.5 <?= htmlspecialchars($extraClass, ENT_QUOTES, 'UTF-8') ?>">
     <?php if ($label): ?>
-        <label for="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>" class="text-xs font-bold uppercase tracking-wider text-mystic-100/50 ml-1">
+        <label for="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>" class="text-xs font-bold uppercase tracking-wider text-mystic-900/50 dark:text-mystic-100/50 ml-1">
             <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?> <?php if ($required): ?><span class="text-arcane-500 ml-0.5">*</span><?php endif; ?>
         </label>
     <?php endif; ?>

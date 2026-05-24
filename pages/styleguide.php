@@ -5,11 +5,6 @@ require_alias('@/helpers/db.php');
 
 session_start();
 
-if (empty($_SESSION['user_id']) || empty($_SESSION['is_admin'])) {
-    header('Location: /pages/index.php');
-    exit;
-}
-
 // Gestion du POST et validation du token CSRF
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_POST['csrf_token']) || empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
