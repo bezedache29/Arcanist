@@ -6,8 +6,9 @@
  * @var string|null $extraClass
  */
 
-$level = $level ?? 1;
-$tag = "h" . $level;
+$level = (int)($level ?? 1);
+$level = max(1, min(6, $level));
+$tag = 'h' . $level;
 
 $styles = [
     1 => 'font-grimoire text-4xl md:text-5xl text-mystic-500 font-bold tracking-wide',
@@ -15,9 +16,9 @@ $styles = [
     3 => 'font-grimoire text-xl text-mystic-400 font-medium'
 ];
 
-$class = $styles[$level] . ' ' . ($extraClass ?? '');
+$class = ($styles[$level] ?? $styles[1]) . ' ' . ($extraClass ?? '');
 ?>
 
-<<?= $tag ?> class="<?= $class ?>">
-    <?= $text ?>
+<<?= $tag ?> class="<?= htmlspecialchars($class, ENT_QUOTES, 'UTF-8') ?>">
+    <?= htmlspecialchars($text ?? '', ENT_QUOTES, 'UTF-8') ?>
 </<?= $tag ?>>

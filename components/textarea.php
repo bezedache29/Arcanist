@@ -32,21 +32,21 @@ if (!empty($error)) {
 }
 ?>
 
-<div class="flex flex-col gap-1.5 <?= $extraClass ?>">
+<div class="flex flex-col gap-1.5 <?= htmlspecialchars($extraClass, ENT_QUOTES, 'UTF-8') ?>">
     <?php if ($label): ?>
-        <label for="<?= $id ?>" class="text-xs font-bold uppercase tracking-wider text-mystic-100/50 ml-1">
-            <?= $label ?> <?php if ($required): ?><span class="text-arcane-500 ml-0.5">*</span><?php endif; ?>
+        <label for="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>" class="text-xs font-bold uppercase tracking-wider text-mystic-100/50 ml-1">
+            <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?> <?php if ($required): ?><span class="text-arcane-500 ml-0.5">*</span><?php endif; ?>
         </label>
     <?php endif; ?>
 
     <textarea
-        name="<?= $name ?>"
-        id="<?= $id ?>"
-        placeholder="<?= $placeholder ?>"
+        name="<?= htmlspecialchars($name, ENT_QUOTES, 'UTF-8') ?>"
+        id="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>"
+        placeholder="<?= htmlspecialchars($placeholder, ENT_QUOTES, 'UTF-8') ?>"
         <?= $required ? 'required' : '' ?>
-        class="<?= $inputClass ?> min-h-[120px] resize-y"><?= htmlspecialchars($value) ?></textarea>
+        class="<?= htmlspecialchars($inputClass, ENT_QUOTES, 'UTF-8') ?> min-h-[120px] resize-y"><?= htmlspecialchars($value, ENT_QUOTES, 'UTF-8') ?></textarea>
 
     <?php if (!empty($error)): ?>
-        <p class="text-xs text-arcane-500 mt-0.5 ml-1 font-medium"><?= $error ?></p>
+        <p class="text-xs text-arcane-500 mt-0.5 ml-1 font-medium"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p>
     <?php endif; ?>
 </div>

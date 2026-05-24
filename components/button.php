@@ -34,15 +34,21 @@ $sizes = [
     'lg' => 'px-8 py-3.5 text-base'
 ];
 
-$classes = "{$baseStyles} {$variants[$variant]} {$sizes[$size]} {$extraClass}";
+$variantClass = $variants[$variant] ?? $variants['primary'];
+$sizeClass = $sizes[$size] ?? $sizes['md'];
+$classes = "{$baseStyles} {$variantClass} {$sizeClass} {$extraClass}";
 ?>
 
 <?php if ($type === 'a'): ?>
-    <a href="<?= $href ?? '#' ?>" class="<?= $classes ?>" <?= $onclick ? "onclick=\"$onclick\"" : "" ?>>
-        <?= $label ?>
+    <a href="<?= htmlspecialchars($href ?? '#', ENT_QUOTES, 'UTF-8') ?>"
+        class="<?= htmlspecialchars($classes, ENT_QUOTES, 'UTF-8') ?>"
+        <?= $onclick ? 'onclick="' . htmlspecialchars($onclick, ENT_QUOTES, 'UTF-8') . '"' : '' ?>>
+        <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>
     </a>
 <?php else: ?>
-    <button type="<?= $attrType ?? 'button' ?>" class="<?= $classes ?>" <?= $onclick ? "onclick=\"$onclick\"" : "" ?>>
-        <?= $label ?>
+    <button type="<?= htmlspecialchars($attrType ?? 'button', ENT_QUOTES, 'UTF-8') ?>"
+        class="<?= htmlspecialchars($classes, ENT_QUOTES, 'UTF-8') ?>"
+        <?= $onclick ? 'onclick="' . htmlspecialchars($onclick, ENT_QUOTES, 'UTF-8') . '"' : '' ?>>
+        <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>
     </button>
 <?php endif; ?>
