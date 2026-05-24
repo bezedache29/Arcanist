@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @var string|null $text
- * @var string|null $variant  default | mystic | success | warning | danger | info
- * @var string|null $size     sm | md
- * @var string|null $extraClass
+ * `@var` string|null $text        Texte à afficher dans le badge
+ * `@var` string|null $variant     Variante visuelle : default | mystic | success | warning | danger | info
+ * `@var` string|null $size        Taille : sm | md
+ * `@var` string|null $extraClass  Classes CSS additionnelles
  */
 
 $text       = $text ?? 'Badge';

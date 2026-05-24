@@ -1,10 +1,11 @@
 <?php
-/** @var string $csrfToken */
+
+/** `@var` string $csrfToken Jeton CSRF pour les formulaires POST */
 $csrfToken = $csrfToken ?? '';
 
 // Closures utilitaires pour la documentation
 $propsTable = function (array $rows) {
-    ?>
+?>
     <div class="overflow-x-auto rounded-xl border border-arcane-700 mb-6">
         <table class="w-full text-sm font-ui">
             <thead>
@@ -26,13 +27,13 @@ $propsTable = function (array $rows) {
             </tbody>
         </table>
     </div>
-    <?php
+<?php
 };
 
 $codeBlock = function (string $code) {
-    ?>
+?>
     <pre class="bg-arcane-900 rounded-xl border border-arcane-700 p-5 text-xs font-mono text-mystic-400/90 overflow-x-auto leading-relaxed mb-8"><code><?= htmlspecialchars($code) ?></code></pre>
-    <?php
+<?php
 };
 ?>
 <!DOCTYPE html>
@@ -56,7 +57,7 @@ $codeBlock = function (string $code) {
                 extend: {
                     backgroundImage: {
                         'glow-light': 'radial-gradient(circle at top, rgba(214, 199, 177, 0.2), rgba(245, 239, 230, 1))',
-                        'glow-dark':  'radial-gradient(circle at top, rgba(180, 147, 91, 0.05), transparent 50%)',
+                        'glow-dark': 'radial-gradient(circle at top, rgba(180, 147, 91, 0.05), transparent 50%)',
                     },
                     colors: {
                         arcane: {
@@ -75,7 +76,7 @@ $codeBlock = function (string $code) {
                     },
                     fontFamily: {
                         grimoire: ['"Playfair Display"', 'serif'],
-                        ui:       ['"Inter"', 'sans-serif'],
+                        ui: ['"Inter"', 'sans-serif'],
                     },
                     boxShadow: {
                         'glow-mystic': '0 0 15px -3px rgba(196, 166, 97, 0.25)',
@@ -99,6 +100,7 @@ $codeBlock = function (string $code) {
             --mystic-400: #C5A672;
             --mystic-100: #FFFFFF;
         }
+
         .dark {
             --arcane-900: #140C0B;
             --arcane-800: #231513;
@@ -121,9 +123,21 @@ $codeBlock = function (string $code) {
             transition: color 150ms, background-color 150ms;
             text-decoration: none;
         }
-        .dark .nav-link { color: rgba(245, 239, 230, 0.4); }
-        .nav-link:hover { color: var(--mystic-400); background-color: rgba(180, 147, 91, 0.07); }
-        .nav-link.active { color: var(--mystic-500); background-color: rgba(180, 147, 91, 0.12); font-weight: 600; }
+
+        .dark .nav-link {
+            color: rgba(245, 239, 230, 0.4);
+        }
+
+        .nav-link:hover {
+            color: var(--mystic-400);
+            background-color: rgba(180, 147, 91, 0.07);
+        }
+
+        .nav-link.active {
+            color: var(--mystic-500);
+            background-color: rgba(180, 147, 91, 0.12);
+            font-weight: 600;
+        }
 
         /* Sections de composants */
         .ds-section {
@@ -131,7 +145,10 @@ $codeBlock = function (string $code) {
             border-top: 1px solid rgba(214, 199, 177, 0.2);
             padding-top: 4rem;
         }
-        .dark .ds-section { border-top-color: rgba(61, 28, 25, 0.5); }
+
+        .dark .ds-section {
+            border-top-color: rgba(61, 28, 25, 0.5);
+        }
 
         /* Boîte de démonstration visuelle */
         .demo-box {
@@ -152,7 +169,10 @@ $codeBlock = function (string $code) {
             color: rgba(26, 22, 20, 0.35);
             margin-bottom: 0.75rem;
         }
-        .dark .label-meta { color: rgba(245, 239, 230, 0.3); }
+
+        .dark .label-meta {
+            color: rgba(245, 239, 230, 0.3);
+        }
     </style>
 </head>
 
@@ -170,12 +190,12 @@ $codeBlock = function (string $code) {
         <div class="flex items-center gap-3">
             <span class="hidden sm:inline font-mono text-[11px] text-mystic-100/20 bg-arcane-900/60 px-2.5 py-1 rounded-full border border-arcane-700">v1.0.0</span>
             <button id="theme-toggle" type="button" aria-label="Basculer le thème"
-                    class="p-2 rounded-lg bg-arcane-700/40 border border-arcane-700 hover:border-mystic-500/50 text-mystic-100/50 hover:text-mystic-400 transition-all">
+                class="p-2 rounded-lg bg-arcane-700/40 border border-arcane-700 hover:border-mystic-500/50 text-mystic-100/50 hover:text-mystic-400 transition-all">
                 <svg id="icon-dark" class="hidden h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
                 </svg>
                 <svg id="icon-light" class="hidden h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
                 </svg>
             </button>
         </div>
@@ -189,15 +209,15 @@ $codeBlock = function (string $code) {
                 <div>
                     <p class="text-[10px] font-bold uppercase tracking-widest text-mystic-100/20 mb-2 px-3">Fondations</p>
                     <ul class="space-y-0.5">
-                        <li><a href="#couleurs"     class="nav-link">Couleurs</a></li>
-                        <li><a href="#typographie"  class="nav-link">Typographie</a></li>
-                        <li><a href="#ombres"        class="nav-link">Ombres & Glow</a></li>
+                        <li><a href="#couleurs" class="nav-link">Couleurs</a></li>
+                        <li><a href="#typographie" class="nav-link">Typographie</a></li>
+                        <li><a href="#ombres" class="nav-link">Ombres & Glow</a></li>
                     </ul>
                 </div>
                 <div>
                     <p class="text-[10px] font-bold uppercase tracking-widest text-mystic-100/20 mb-2 px-3">Composants</p>
                     <ul class="space-y-0.5">
-                        <li><a href="#button"    class="nav-link">Button</a></li>
+                        <li><a href="#button" class="nav-link">Button</a></li>
                         <li>
                             <a href="#badge" class="nav-link flex items-center gap-2">
                                 Badge
@@ -210,11 +230,11 @@ $codeBlock = function (string $code) {
                                 <span class="text-[9px] bg-emerald-100 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20 px-1.5 py-0.5 rounded-full uppercase tracking-wide leading-none">new</span>
                             </a>
                         </li>
-                        <li><a href="#input"     class="nav-link">Input</a></li>
-                        <li><a href="#textarea"  class="nav-link">Textarea</a></li>
-                        <li><a href="#title"     class="nav-link">Title</a></li>
-                        <li><a href="#card"      class="nav-link">Card</a></li>
-                        <li><a href="#modal"     class="nav-link">Modal</a></li>
+                        <li><a href="#input" class="nav-link">Input</a></li>
+                        <li><a href="#textarea" class="nav-link">Textarea</a></li>
+                        <li><a href="#title" class="nav-link">Title</a></li>
+                        <li><a href="#card" class="nav-link">Card</a></li>
+                        <li><a href="#modal" class="nav-link">Modal</a></li>
                     </ul>
                 </div>
                 <div class="px-3 pt-4 border-t border-arcane-700/50">
@@ -265,7 +285,7 @@ $codeBlock = function (string $code) {
                             <div>
                                 <div class="flex h-14 rounded-xl overflow-hidden border border-arcane-700/50 mb-2 shadow-sm">
                                     <div class="flex-1" style="background:<?= $light ?>;" title="Mode clair"></div>
-                                    <div class="flex-1" style="background:<?= $dark ?>;"  title="Mode sombre"></div>
+                                    <div class="flex-1" style="background:<?= $dark ?>;" title="Mode sombre"></div>
                                 </div>
                                 <p class="font-mono text-xs font-semibold text-mystic-400"><?= $token ?></p>
                                 <p class="text-[10px] text-mystic-100/30 font-mono">☀ <?= $light ?> / ☾ <?= $dark ?></p>
@@ -288,7 +308,7 @@ $codeBlock = function (string $code) {
                             <div>
                                 <div class="flex h-14 rounded-xl overflow-hidden border border-arcane-700/50 mb-2 shadow-sm">
                                     <div class="flex-1" style="background:<?= $light ?>;" title="Mode clair"></div>
-                                    <div class="flex-1" style="background:<?= $dark ?>;"  title="Mode sombre"></div>
+                                    <div class="flex-1" style="background:<?= $dark ?>;" title="Mode sombre"></div>
                                 </div>
                                 <p class="font-mono text-xs font-semibold text-mystic-400"><?= $token ?></p>
                                 <p class="text-[10px] text-mystic-100/30 font-mono">☀ <?= $light ?></p>
@@ -406,7 +426,7 @@ $codeBlock = function (string $code) {
                         ['href',      'string',  'null',      "URL cible (requis si type = 'a')"],
                         ['onclick',   'string',  "''",        'Code JavaScript inline'],
                         ['disabled',  'bool',    'false',     'Désactive visuellement et fonctionnellement'],
-                        ['extraClass','string',  "''",        'Classes Tailwind supplémentaires'],
+                        ['extraClass', 'string',  "''",        'Classes Tailwind supplémentaires'],
                     ]); ?>
 
                     <?php $codeBlock("render_component('button', [\n    'label'   => 'Commander',\n    'variant' => 'primary',\n    'size'    => 'md',\n]);\n\n// Lien stylé en bouton\nrender_component('button', [\n    'type'  => 'a',\n    'href'  => '/pages/shop.php',\n    'label' => 'Voir le catalogue',\n    'variant' => 'outline',\n]);\n\n// Soumission de formulaire désactivée\nrender_component('button', [\n    'label'    => 'Enregistrer',\n    'attrType' => 'submit',\n    'variant'  => 'primary',\n    'disabled' => true,\n]);"); ?>
@@ -452,7 +472,7 @@ $codeBlock = function (string $code) {
                         ['text',      'string', "'Badge'",   'Texte affiché'],
                         ['variant',   'string', "'default'", "default · mystic · success · warning · danger · info"],
                         ['size',      'string', "'md'",      "sm · md"],
-                        ['extraClass','string', "''",        'Classes Tailwind supplémentaires'],
+                        ['extraClass', 'string', "''",        'Classes Tailwind supplémentaires'],
                     ]); ?>
 
                     <?php $codeBlock("render_component('badge', [\n    'text'    => 'En stock',\n    'variant' => 'success',\n]);\n\nrender_component('badge', [\n    'text'    => 'Nouveau',\n    'variant' => 'info',\n    'size'    => 'sm',\n]);"); ?>
@@ -560,7 +580,7 @@ $codeBlock = function (string $code) {
                         ['type',       'string', "'text'",  'Type HTML : text · email · password · number · …'],
                         ['id',         'string', '$name',   'Attribut id (reprend name si absent)'],
                         ['label',      'string', "''",      'Libellé affiché au-dessus du champ'],
-                        ['placeholder','string', "''",      'Texte indicatif'],
+                        ['placeholder', 'string', "''",      'Texte indicatif'],
                         ['value',      'string', "''",      'Valeur pré-remplie'],
                         ['required',   'bool',   'false',   'Ajoute l\'attribut required et un astérisque rouge'],
                         ['error',      'string', "''",      'Message d\'erreur — passe le champ en état danger'],
@@ -597,7 +617,7 @@ $codeBlock = function (string $code) {
                         ['name',       'string', "''",    'Attribut name (obligatoire)'],
                         ['id',         'string', '$name', 'Attribut id (reprend name si absent)'],
                         ['label',      'string', "''",    'Libellé affiché au-dessus'],
-                        ['placeholder','string', "''",    'Texte indicatif'],
+                        ['placeholder', 'string', "''",    'Texte indicatif'],
                         ['value',      'string', "''",    'Contenu pré-rempli'],
                         ['required',   'bool',   'false', 'Ajoute l\'attribut required et un astérisque rouge'],
                         ['error',      'string', "''",    'Message d\'erreur'],
@@ -632,7 +652,7 @@ $codeBlock = function (string $code) {
                     <?php $propsTable([
                         ['text',      'string', "''",  'Texte du titre (obligatoire)'],
                         ['level',     'int',    '1',   'Niveau sémantique 1–6 (style limité à H1/H2/H3)'],
-                        ['extraClass','string', "''",  'Classes Tailwind additionnelles (ex: couleur)'],
+                        ['extraClass', 'string', "''",  'Classes Tailwind additionnelles (ex: couleur)'],
                     ]); ?>
 
                     <?php $codeBlock("render_component('title', [\n    'text'  => 'Catalogue des artefacts',\n    'level' => 1,\n]);\n\n// Avec couleur surchargée\nrender_component('title', [\n    'text'       => 'Attention',\n    'level'      => 3,\n    'extraClass' => 'text-arcane-500',\n]);"); ?>
@@ -669,7 +689,7 @@ $codeBlock = function (string $code) {
 
                     <?php $propsTable([
                         ['title',   'string',     '—',    'Nom du produit (obligatoire)'],
-                        ['image',   'string|null','null', 'URL de l\'image ou null pour afficher le placeholder'],
+                        ['image',   'string|null', 'null', 'URL de l\'image ou null pour afficher le placeholder'],
                         ['priceHT', 'float|int',  '—',    'Prix hors taxe — TTC calculé automatiquement (+20 % TVA)'],
                         ['ref',     'string',     '—',    'Référence produit affichée en uppercase'],
                         ['stock',   'int',        '—',    'Quantité en stock affichée dans le badge image'],
@@ -748,8 +768,8 @@ $codeBlock = function (string $code) {
 
     <script>
         // ——— Thème clair/sombre ———
-        const html      = document.getElementById('main-html');
-        const iconDark  = document.getElementById('icon-dark');
+        const html = document.getElementById('main-html');
+        const iconDark = document.getElementById('icon-dark');
         const iconLight = document.getElementById('icon-light');
 
         function applyTheme(dark) {
@@ -782,7 +802,9 @@ $codeBlock = function (string $code) {
                     if (active) active.classList.add('active');
                 }
             });
-        }, { rootMargin: '-15% 0px -80% 0px' });
+        }, {
+            rootMargin: '-15% 0px -80% 0px'
+        });
 
         sections.forEach(s => observer.observe(s));
     </script>

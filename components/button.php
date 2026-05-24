@@ -1,15 +1,15 @@
 <?php
 
 /**
- * @var string|null $label
- * @var string|null $type       button | a
- * @var string|null $variant    primary | secondary | outline | ghost | danger
- * @var string|null $size       sm | md | lg
- * @var string|null $href
- * @var string|null $extraClass
- * @var string|null $attrType   button | submit | reset
- * @var string|null $onclick
- * @var bool|null   $disabled
+ * `@var` string|null $label       Libellé du bouton
+ * `@var` string|null $type        Type d'élément : button | a
+ * `@var` string|null $variant     Variante visuelle : primary | secondary | outline | ghost | danger
+ * `@var` string|null $size        Taille : sm | md | lg
+ * `@var` string|null $href        URL cible (pour type='a')
+ * `@var` string|null $extraClass  Classes CSS supplémentaires
+ * `@var` string|null $attrType    Type d'attribut HTML : button | submit | reset
+ * `@var` string|null $onclick     Code JavaScript inline
+ * `@var` bool|null   $disabled    État désactivé
  */
 
 $type       = $type ?? 'button';
@@ -43,16 +43,16 @@ $classes = $baseStyles . ' ' . ($variants[$variant] ?? $variants['primary']) . '
 
 <?php if ($type === 'a'): ?>
     <a href="<?= htmlspecialchars($href ?? '#', ENT_QUOTES, 'UTF-8') ?>"
-       class="<?= htmlspecialchars($classes, ENT_QUOTES, 'UTF-8') ?>"
-       <?= $onclick ? 'onclick="' . htmlspecialchars($onclick, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
-       <?= $disabled ? 'aria-disabled="true" tabindex="-1"' : '' ?>>
+        class="<?= htmlspecialchars($classes, ENT_QUOTES, 'UTF-8') ?>"
+        <?= $onclick ? 'onclick="' . htmlspecialchars($onclick, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
+        <?= $disabled ? 'aria-disabled="true" tabindex="-1"' : '' ?>>
         <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>
     </a>
 <?php else: ?>
     <button type="<?= htmlspecialchars($attrType ?? 'button', ENT_QUOTES, 'UTF-8') ?>"
-            class="<?= htmlspecialchars($classes, ENT_QUOTES, 'UTF-8') ?>"
-            <?= $onclick ? 'onclick="' . htmlspecialchars($onclick, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
-            <?= $disabled ? 'disabled aria-disabled="true"' : '' ?>>
+        class="<?= htmlspecialchars($classes, ENT_QUOTES, 'UTF-8') ?>"
+        <?= $onclick ? 'onclick="' . htmlspecialchars($onclick, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
+        <?= $disabled ? 'disabled aria-disabled="true"' : '' ?>>
         <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>
     </button>
 <?php endif; ?>

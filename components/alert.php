@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @var string|null $type         success | error | warning | info
- * @var string|null $message
- * @var string|null $title
- * @var bool|null   $dismissible
- * @var string|null $id
+ * `@var` string|null $type         Type d'alerte : success | error | warning | info
+ * `@var` string|null $message      Message à afficher
+ * `@var` string|null $title        Titre optionnel
+ * `@var` bool|null   $dismissible  Si vrai, affiche le bouton de fermeture
+ * `@var` string|null $id           Identifiant HTML unique
  */
 
 $type        = $type ?? 'info';
@@ -53,10 +53,10 @@ $icon = $icons[$type]  ?? $icons['info'];
 ?>
 
 <div id="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>" role="alert"
-     class="flex gap-3 rounded-xl border p-4 font-ui <?= $s['wrap'] ?>">
+    class="flex gap-3 rounded-xl border p-4 font-ui <?= $s['wrap'] ?>">
 
     <svg class="h-5 w-5 flex-shrink-0 mt-0.5 <?= $s['icon'] ?>" fill="none" viewBox="0 0 24 24"
-         stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+        stroke-width="1.5" stroke="currentColor" aria-hidden="true">
         <?= $icon ?>
     </svg>
 
@@ -69,11 +69,11 @@ $icon = $icons[$type]  ?? $icons['info'];
 
     <?php if ($dismissible): ?>
         <button type="button"
-                onclick="document.getElementById('<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>').remove()"
-                class="flex-shrink-0 <?= $s['icon'] ?> opacity-50 hover:opacity-100 transition-opacity"
-                aria-label="Fermer cette alerte">
+            onclick="document.getElementById('<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>').remove()"
+            class="flex-shrink-0 <?= $s['icon'] ?> opacity-50 hover:opacity-100 transition-opacity"
+            aria-label="Fermer cette alerte">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
     <?php endif; ?>
