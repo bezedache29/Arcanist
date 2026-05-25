@@ -188,6 +188,14 @@ $codeBlock = function (string $code) {
             <span class="text-sm text-mystic-100/40">Design System</span>
         </div>
         <div class="flex items-center gap-3">
+            <a href="/pages/index.php"
+                class="hidden sm:flex items-center gap-1.5 text-xs text-mystic-100/40 hover:text-mystic-400 transition-colors px-2.5 py-1 rounded-lg hover:bg-arcane-700/40 border border-transparent hover:border-arcane-700"
+                aria-label="Retour à la page de connexion">
+                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                Connexion
+            </a>
             <span class="hidden sm:inline font-mono text-[11px] text-mystic-100/20 bg-arcane-900/60 px-2.5 py-1 rounded-full border border-arcane-700">v1.0.0</span>
             <button id="theme-toggle" type="button" aria-label="Basculer le thème"
                 class="p-2 rounded-lg bg-arcane-700/40 border border-arcane-700 hover:border-mystic-500/50 text-mystic-100/50 hover:text-mystic-400 transition-all">

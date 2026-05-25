@@ -6,39 +6,49 @@
  */
 ?>
 <div class="mb-8">
-    <a href="/pages/admin/categories/categories.php" class="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium flex items-center transition">
-        &larr; Retour aux catégories
+    <a href="/pages/admin/categories/categories.php"
+       class="inline-flex items-center gap-1.5 text-sm font-medium text-mystic-500 hover:text-mystic-400 transition-colors mb-4">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Retour aux catégories
     </a>
-    <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-4">Modifier la catégorie</h1>
+    <?php render_component('title', ['text' => 'Modifier la catégorie', 'level' => 1]); ?>
 </div>
 
-<div class="bg-white dark:bg-slate-800 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 sm:rounded-xl overflow-hidden transition-colors max-w-xl">
+<div class="bg-arcane-800 rounded-xl border border-arcane-700 max-w-xl">
     <div class="p-6 sm:p-8">
 
         <?php if (!empty($error)): ?>
-            <div class="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded relative mb-6">
-                <?= htmlspecialchars($error) ?>
-            </div>
+            <?php render_component('alert', ['type' => 'error', 'message' => $error]); ?>
+            <div class="mb-6"></div>
         <?php endif; ?>
 
-        <!-- Le formulaire renvoie vers la meme page avec l'ID dans l'URL -->
-        <form action="/pages/admin/categories/categories_edit.php?id=<?= $category['id'] ?>" method="POST" class="space-y-6">
-            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+        <form action="/pages/admin/categories/categories_edit.php?id=<?= (int)$category['id'] ?>"
+              method="POST" class="space-y-6">
+            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 
-            <div>
-                <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Nom <span class="text-red-500">*</span></label>
-                <!-- On pre-remplit le champ avec le nom actuel -->
-                <input type="text" name="name" id="name" value="<?= htmlspecialchars($category['name']) ?>" required class="mt-1 block w-full rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 py-2 px-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 text-slate-900 dark:text-white transition-colors">
-            </div>
+            <?php render_component('input', [
+                'name'     => 'name',
+                'label'    => 'Nom',
+                'required' => true,
+                'value'    => $category['name'],
+            ]); ?>
 
-            <div class="pt-4 flex items-center justify-end space-x-4 border-t border-slate-200 dark:border-slate-700 mt-8">
-                <a href="/pages/admin/categories/categories.php" class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors">
-                    Annuler
-                </a>
-                <button type="submit" class="inline-flex justify-center rounded-md bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-colors">
-                    Enregistrer les modifications
-                </button>
+            <div class="pt-5 flex items-center justify-end gap-4 border-t border-arcane-700/50">
+                <?php render_component('button', [
+                    'type'    => 'a',
+                    'href'    => '/pages/admin/categories/categories.php',
+                    'label'   => 'Annuler',
+                    'variant' => 'ghost',
+                ]); ?>
+                <?php render_component('button', [
+                    'label'    => 'Enregistrer les modifications',
+                    'variant'  => 'primary',
+                    'attrType' => 'submit',
+                ]); ?>
             </div>
         </form>
+
     </div>
 </div>

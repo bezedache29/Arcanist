@@ -1,37 +1,62 @@
-<div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-md border dark:border-slate-700 transition-colors">
-    <h1 class="text-3xl font-bold text-center text-slate-800 dark:text-slate-100 mb-6">Créer un compte</h1>
+<div class="bg-arcane-800 border border-arcane-700 rounded-2xl p-8 shadow-glow-mystic">
+
+    <div class="text-center mb-8">
+        <?php render_component('title', ['text' => 'Créer un compte', 'level' => 1, 'extraClass' => 'text-center']); ?>
+        <p class="mt-2 text-sm text-mystic-900/50 dark:text-mystic-100/40">Espace professionnel B2B</p>
+    </div>
 
     <?php if (!empty($error)): ?>
-        <div class="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded relative mb-4">
-            <?= htmlspecialchars($error) ?>
+        <div class="mb-6">
+            <?php render_component('alert', ['type' => 'error', 'message' => $error]); ?>
         </div>
     <?php endif; ?>
 
     <form action="/pages/auth/register.php" method="POST" class="space-y-4">
         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
-        <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Nom de l'entreprise</label>
-            <input type="text" name="company_name" required class="mt-1 w-full p-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white transition-colors">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Email pro</label>
-            <input type="email" name="email" required class="mt-1 w-full p-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white transition-colors">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Mot de passe</label>
-            <input type="password" name="password" required class="mt-1 w-full p-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white transition-colors">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Confirmer le mot de passe</label>
-            <input type="password" name="password_confirm" required class="mt-1 w-full p-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white transition-colors">
-        </div>
 
-        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition">
-            S'inscrire
-        </button>
+        <?php render_component('input', [
+            'name'     => 'company_name',
+            'label'    => "Nom de l'entreprise",
+            'required' => true,
+        ]); ?>
+        <?php render_component('input', [
+            'name'        => 'email',
+            'type'        => 'email',
+            'label'       => 'Email pro',
+            'placeholder' => 'contact@entreprise.fr',
+            'required'    => true,
+        ]); ?>
+        <?php render_component('input', [
+            'name'       => 'password',
+            'type'       => 'password',
+            'label'      => 'Mot de passe',
+            'required'   => true,
+            'showToggle' => true,
+        ]); ?>
+        <?php render_component('input', [
+            'name'       => 'password_confirm',
+            'type'       => 'password',
+            'label'      => 'Confirmer le mot de passe',
+            'required'   => true,
+            'showToggle' => true,
+        ]); ?>
+
+        <div class="pt-2">
+            <?php render_component('button', [
+                'label'      => "S'inscrire",
+                'variant'    => 'primary',
+                'attrType'   => 'submit',
+                'size'       => 'lg',
+                'extraClass' => 'w-full justify-center',
+            ]); ?>
+        </div>
     </form>
 
-    <div class="mt-6 border-t border-slate-200 dark:border-slate-700 pt-4 text-center">
-        <p class="text-slate-700 dark:text-slate-300 text-sm">Déjà un compte ? <a href="/" class="text-blue-600 font-bold hover:underline">Se connecter</a></p>
+    <div class="mt-6 border-t border-arcane-700 pt-6 text-center">
+        <p class="text-sm text-mystic-900/50 dark:text-mystic-100/50">
+            Déjà un compte ?
+            <a href="/" class="text-mystic-500 hover:text-mystic-400 transition-colors font-semibold ml-1">Se connecter</a>
+        </p>
     </div>
+
 </div>
