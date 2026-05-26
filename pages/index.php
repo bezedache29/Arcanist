@@ -20,26 +20,38 @@ if (isset($_SESSION['user_id'])) {
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
+    $csrfToken = $_POST['csrf_token'] ?? '';
+    $sessionToken = $_SESSION['csrf_token'] ?? '';
 
-    $pdo = getDbConnection();
-    // Exclusion des comptes supprimés (soft delete)
-    $stmt = $pdo->prepare('SELECT * FROM clients WHERE email = ? AND deleted_at IS NULL');
-    $stmt->execute([$email]);
-    $user = $stmt->fetch();
-
-    if ($user && password_verify($password, $user['password_hash'])) {
-        session_regenerate_id(true);
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['is_admin'] = $user['is_admin'];
-        $_SESSION['company'] = $user['company_name'];
-
-        header('Location: /pages/dashboard.php');
-        exit;
+    if (empty($csrfToken) || !hash_equals($sessionToken, $csrfToken)) {
+        $error = "Jeton de sécurité invalide ou expiré.";
     } else {
-        $error = "Email ou mot de passe incorrect.";
+        $email = $_POST['email'] ?? '';
+        $password = $_POST['password'] ?? '';
+
+        $pdo = getDbConnection();
+        // Exclusion des comptes supprimés (soft delete)
+        $stmt = $pdo->prepare('SELECT * FROM clients WHERE email = ? AND deleted_at IS NULL');
+        $stmt->execute([$email]);
+        $user = $stmt->fetch();
+
+        if ($user && password_verify($password, $user['password_hash'])) {
+            unset($_SESSION['csrf_token']);
+            session_regenerate_id(true);
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['is_admin'] = $user['is_admin'];
+            $_SESSION['company'] = $user['company_name'];
+
+            header('Location: /pages/dashboard.php');
+            exit;
+        } else {
+            $error = "Email ou mot de passe incorrect.";
+        }
     }
+}
+
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
 render_view('auth/login', ['error' => $error], 'auth');

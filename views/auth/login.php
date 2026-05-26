@@ -12,6 +12,7 @@
     <?php endif; ?>
 
     <form action="/" method="POST" class="space-y-4">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
         <?php render_component('input', [
             'name'        => 'email',
             'type'        => 'email',

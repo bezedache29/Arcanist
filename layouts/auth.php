@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'Authentification — Arcanist' ?></title>
+    <title><?= htmlspecialchars($title ?? 'Authentification — Arcanist', ENT_QUOTES, 'UTF-8') ?></title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,7 +26,7 @@
                 extend: {
                     backgroundImage: {
                         'glow-light': 'radial-gradient(circle at top, rgba(214, 199, 177, 0.2), rgba(245, 239, 230, 1))',
-                        'glow-dark':  'radial-gradient(circle at top, rgba(180, 147, 91, 0.05), transparent 50%)',
+                        'glow-dark': 'radial-gradient(circle at top, rgba(180, 147, 91, 0.05), transparent 50%)',
                     },
                     colors: {
                         arcane: {
@@ -45,7 +45,7 @@
                     },
                     fontFamily: {
                         grimoire: ['"Playfair Display"', 'serif'],
-                        ui:       ['"Inter"', 'sans-serif'],
+                        ui: ['"Inter"', 'sans-serif'],
                     },
                     boxShadow: {
                         'glow-mystic': '0 0 15px -3px rgba(196, 166, 97, 0.25)',
@@ -68,6 +68,7 @@
             --mystic-400: #C5A672;
             --mystic-100: #FFFFFF;
         }
+
         .dark {
             --arcane-900: #140C0B;
             --arcane-800: #231513;
@@ -83,7 +84,7 @@
 
     <script>
         // Application du thème avant le premier rendu pour éviter le flash
-        (function () {
+        (function() {
             const dark = localStorage.theme === 'dark' ||
                 (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
             document.getElementById('main-html').classList.toggle('dark', dark);
@@ -109,7 +110,7 @@
     </div>
 
     <script>
-        const html   = document.getElementById('main-html');
+        const html = document.getElementById('main-html');
         const btnToggle = document.getElementById('theme-toggle');
 
         btnToggle.addEventListener('click', () => {

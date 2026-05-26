@@ -6,7 +6,7 @@
  * @var string|null $title
  */
 
-$currentUri  = $_SERVER['REQUEST_URI'] ?? '';
+$currentUri  = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
 $isDashboard = strpos($currentUri, 'dashboard.php') !== false && strpos($currentUri, 'admin') === false;
 $isShop      = (strpos($currentUri, 'shop') !== false) && strpos($currentUri, 'cart') === false;
 $isOrders    = strpos($currentUri, 'orders') !== false;
@@ -31,7 +31,7 @@ $cartCount   = array_sum($_SESSION['cart'] ?? []);
                 extend: {
                     backgroundImage: {
                         'glow-light': 'radial-gradient(circle at top, rgba(214, 199, 177, 0.2), rgba(245, 239, 230, 1))',
-                        'glow-dark':  'radial-gradient(circle at top, rgba(180, 147, 91, 0.05), transparent 50%)',
+                        'glow-dark': 'radial-gradient(circle at top, rgba(180, 147, 91, 0.05), transparent 50%)',
                     },
                     colors: {
                         arcane: {
@@ -50,7 +50,7 @@ $cartCount   = array_sum($_SESSION['cart'] ?? []);
                     },
                     fontFamily: {
                         grimoire: ['"Playfair Display"', 'serif'],
-                        ui:       ['"Inter"', 'sans-serif'],
+                        ui: ['"Inter"', 'sans-serif'],
                     },
                     boxShadow: {
                         'glow-mystic': '0 0 15px -3px rgba(196, 166, 97, 0.25)',
@@ -73,6 +73,7 @@ $cartCount   = array_sum($_SESSION['cart'] ?? []);
             --mystic-400: #C5A672;
             --mystic-100: #FFFFFF;
         }
+
         .dark {
             --arcane-900: #140C0B;
             --arcane-800: #231513;
@@ -87,7 +88,7 @@ $cartCount   = array_sum($_SESSION['cart'] ?? []);
     </style>
 
     <script>
-        (function () {
+        (function() {
             const dark = localStorage.theme === 'dark' ||
                 (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
             document.getElementById('main-html').classList.toggle('dark', dark);
@@ -128,7 +129,7 @@ $cartCount   = array_sum($_SESSION['cart'] ?? []);
                     <!-- Icône panier Desktop -->
                     <div class="hidden sm:flex sm:items-center">
                         <a href="/pages/cart/cart.php"
-                           class="relative flex items-center justify-center h-9 w-9 rounded-full <?= $isCart ? 'text-mystic-500' : 'text-mystic-900/50 dark:text-mystic-100/50 hover:text-mystic-400' ?> hover:bg-arcane-700/40 transition-colors">
+                            class="relative flex items-center justify-center h-9 w-9 rounded-full <?= $isCart ? 'text-mystic-500' : 'text-mystic-900/50 dark:text-mystic-100/50 hover:text-mystic-400' ?> hover:bg-arcane-700/40 transition-colors">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                             </svg>
@@ -184,7 +185,7 @@ $cartCount   = array_sum($_SESSION['cart'] ?? []);
                     <!-- Icône panier Mobile -->
                     <div class="flex items-center sm:hidden">
                         <a href="/pages/cart/cart.php"
-                           class="relative flex items-center justify-center h-9 w-9 rounded-full <?= $isCart ? 'text-mystic-500' : 'text-mystic-900/50 dark:text-mystic-100/50 hover:text-mystic-400' ?> hover:bg-arcane-700/40 transition-colors mr-1">
+                            class="relative flex items-center justify-center h-9 w-9 rounded-full <?= $isCart ? 'text-mystic-500' : 'text-mystic-900/50 dark:text-mystic-100/50 hover:text-mystic-400' ?> hover:bg-arcane-700/40 transition-colors mr-1">
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                             </svg>
@@ -198,9 +199,9 @@ $cartCount   = array_sum($_SESSION['cart'] ?? []);
 
                     <!-- Bouton burger Mobile -->
                     <div class="-mr-2 flex items-center sm:hidden">
-                        <button type="button" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"
+                        <button type="button" onclick="const menu=document.getElementById('mobile-menu');menu.classList.toggle('hidden');this.setAttribute('aria-expanded', menu.classList.contains('hidden') ? 'false' : 'true');"
                             class="inline-flex items-center justify-center rounded-lg p-2 text-mystic-900/40 dark:text-mystic-100/40 hover:bg-arcane-700/40 hover:text-mystic-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-mystic-500 transition-colors"
-                            aria-expanded="false">
+                            aria-expanded="false" aria-controls="mobile-menu">
                             <span class="sr-only">Ouvrir le menu principal</span>
                             <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />

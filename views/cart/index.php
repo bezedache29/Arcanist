@@ -1,4 +1,8 @@
 <?php
+/** @var array  $items      */
+/** @var float  $totalHT    */
+/** @var string $csrf_token */
+
 $tva      = 0.20;
 $totalTVA = $totalHT * $tva;
 $totalTTC = $totalHT * (1 + $tva);
@@ -101,13 +105,14 @@ $totalTTC = $totalHT * (1 + $tva);
                     <form action="/pages/cart/cart_remove.php" method="POST" class="shrink-0">
                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8') ?>">
                         <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
-                        <button type="submit"
-                                class="p-2 rounded-lg text-mystic-900/30 dark:text-mystic-100/30 hover:text-arcane-500 hover:bg-arcane-500/10 transition-colors"
-                                title="Retirer du panier">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                        </button>
+                        <?php render_component('button', [
+                            'variant'    => 'none',
+                            'size'       => 'icon',
+                            'attrType'   => 'submit',
+                            'title'      => 'Retirer du panier',
+                            'extraClass' => 'text-mystic-900/30 dark:text-mystic-100/30 hover:text-arcane-500 hover:bg-arcane-500/10 transition-colors',
+                            'content'    => '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>',
+                        ]) ?>
                     </form>
 
                 </div>

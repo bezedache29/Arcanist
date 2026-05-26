@@ -19,6 +19,8 @@ $label      = $label ?? 'Bouton';
 $extraClass = $extraClass ?? '';
 $onclick    = $onclick ?? '';
 $disabled   = $disabled ?? false;
+$title      = $title ?? '';
+$content    = $content ?? null;
 
 $baseStyles = $disabled
     ? 'inline-flex items-center justify-center font-semibold rounded-lg opacity-40 cursor-not-allowed select-none'
@@ -30,12 +32,14 @@ $variants = [
     'outline'   => 'border border-mystic-500/50 text-mystic-500 hover:bg-mystic-500/10',
     'ghost'     => 'text-mystic-900/60 dark:text-mystic-100/60 hover:text-mystic-400 hover:bg-white/5',
     'danger'    => 'bg-arcane-500 text-mystic-100 hover:bg-red-700 shadow-glow-arcane',
+    'none'      => '',
 ];
 
 $sizes = [
-    'sm' => 'px-3 py-1.5 text-xs',
-    'md' => 'px-6 py-2.5 text-sm',
-    'lg' => 'px-8 py-3.5 text-base',
+    'sm'   => 'px-3 py-1.5 text-xs',
+    'md'   => 'px-6 py-2.5 text-sm',
+    'lg'   => 'px-8 py-3.5 text-base',
+    'icon' => 'p-2',
 ];
 
 $classes = $baseStyles . ' ' . ($variants[$variant] ?? $variants['primary']) . ' ' . ($sizes[$size] ?? $sizes['md']) . ' ' . $extraClass;
@@ -52,7 +56,8 @@ $classes = $baseStyles . ' ' . ($variants[$variant] ?? $variants['primary']) . '
     <button type="<?= htmlspecialchars($attrType ?? 'button', ENT_QUOTES, 'UTF-8') ?>"
         class="<?= htmlspecialchars($classes, ENT_QUOTES, 'UTF-8') ?>"
         <?= $onclick ? 'onclick="' . htmlspecialchars($onclick, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
+        <?= $title ? 'title="' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
         <?= $disabled ? 'disabled aria-disabled="true"' : '' ?>>
-        <?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>
+        <?= $content !== null ? $content : htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>
     </button>
 <?php endif; ?>
