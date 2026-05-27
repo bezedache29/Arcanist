@@ -1,40 +1,67 @@
-<div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-md border dark:border-slate-700 transition-colors">
-    <h1 class="text-3xl font-bold text-center text-slate-800 dark:text-slate-100 mb-6">Arcanist B2B</h1>
+<div class="bg-arcane-800 border border-arcane-700 rounded-2xl p-8 shadow-glow-mystic">
+
+    <div class="text-center mb-8">
+        <?php render_component('title', ['text' => 'Arcanist B2B', 'level' => 1, 'extraClass' => 'text-center']); ?>
+        <p class="mt-2 text-sm text-mystic-900/50 dark:text-mystic-100/40">Espace professionnel</p>
+    </div>
 
     <?php if (!empty($error)): ?>
-        <div class="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded relative mb-4">
-            <?= htmlspecialchars($error) ?>
+        <div class="mb-6">
+            <?php render_component('alert', ['type' => 'error', 'message' => $error]); ?>
         </div>
     <?php endif; ?>
 
     <form action="/" method="POST" class="space-y-4">
-        <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Email pro</label>
-            <input type="email" name="email" required class="mt-1 w-full p-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white transition-colors">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Mot de passe</label>
-            <input type="password" name="password" required class="mt-1 w-full p-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white transition-colors">
-        </div>
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        <?php render_component('input', [
+            'name'        => 'email',
+            'type'        => 'email',
+            'label'       => 'Email pro',
+            'placeholder' => 'contact@entreprise.fr',
+            'required'    => true,
+        ]); ?>
+        <?php render_component('input', [
+            'name'        => 'password',
+            'type'        => 'password',
+            'label'       => 'Mot de passe',
+            'required'    => true,
+            'showToggle'  => true,
+        ]); ?>
 
-        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition">
-            Se connecter
-        </button>
+        <div class="pt-2">
+            <?php render_component('button', [
+                'label'      => 'Se connecter',
+                'variant'    => 'primary',
+                'attrType'   => 'submit',
+                'size'       => 'lg',
+                'extraClass' => 'w-full justify-center',
+            ]); ?>
+        </div>
     </form>
 
     <div class="mt-6 text-center">
-        <a href="/pages/auth/register.php" class="text-blue-600 dark:text-blue-400 font-bold hover:underline text-sm transition">Créer un compte entreprise</a>
-    </div>
-
-    <div class="mt-6 border-t dark:border-slate-700 pt-4 transition-colors">
-        <a href="/pages/shop.php" class="block w-full text-center border-2 border-green-500 text-green-600 dark:text-green-500 font-bold py-2 px-4 rounded hover:bg-green-50 dark:hover:bg-green-900/20 transition">
-            Accès Démo (Invité)
+        <a href="/pages/auth/register.php"
+            class="text-sm text-mystic-500 hover:text-mystic-400 transition-colors font-semibold">
+            Créer un compte entreprise
         </a>
     </div>
 
-    <div class="mt-3">
-        <a href="/pages/styleguide.php" class="block w-full text-center border border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400 text-sm py-2 px-4 rounded hover:bg-slate-50 dark:hover:bg-slate-700/50 transition">
-            Design System
-        </a>
+    <div class="mt-6 border-t border-arcane-700 pt-6 space-y-3">
+        <?php render_component('button', [
+            'type'       => 'a',
+            'href'       => '/pages/shop.php',
+            'label'      => 'Accès Démo (Invité)',
+            'variant'    => 'outline',
+            'extraClass' => 'w-full justify-center',
+        ]); ?>
+        <?php render_component('button', [
+            'type'       => 'a',
+            'href'       => '/pages/styleguide.php',
+            'label'      => 'Design System',
+            'variant'    => 'ghost',
+            'size'       => 'sm',
+            'extraClass' => 'w-full justify-center',
+        ]); ?>
     </div>
+
 </div>

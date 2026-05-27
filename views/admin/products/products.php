@@ -5,46 +5,59 @@
  * @var array $productCategories
  */
 ?>
-<div class="sm:flex sm:items-center sm:justify-between mb-8">
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
     <div>
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Gestion du Catalogue</h1>
-        <p class="mt-2 text-sm text-slate-700 dark:text-slate-400">Liste de tous les produits disponibles pour vos clients.</p>
+        <?php render_component('title', ['text' => 'Gestion du Catalogue', 'level' => 1]); ?>
+        <p class="mt-1 text-sm text-mystic-900/60 dark:text-mystic-100/50">
+            Liste de tous les produits disponibles pour vos clients.
+        </p>
     </div>
-    <div class="mt-4 sm:mt-0">
-        <a href="/pages/admin/products/products_create.php" class="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition">
-            Ajouter un produit
-        </a>
-    </div>
+    <?php render_component('button', [
+        'type'    => 'a',
+        'href'    => '/pages/admin/products/products_create.php',
+        'label'   => 'Ajouter un produit',
+        'variant' => 'primary',
+        'size'    => 'sm',
+    ]); ?>
 </div>
 
-<div class="bg-white dark:bg-slate-800 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 sm:rounded-lg overflow-hidden transition-colors">
-    <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
-        <thead class="bg-slate-50 dark:bg-slate-900/50">
+<div class="bg-arcane-800 rounded-xl border border-arcane-700 overflow-hidden">
+    <table class="min-w-full divide-y divide-arcane-700/50">
+        <thead class="bg-arcane-900/50">
             <tr>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900 dark:text-slate-200 w-16">Image</th>
-                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-200 sm:pl-6">Nom du produit</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900 dark:text-slate-200">Catégories</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900 dark:text-slate-200">Prix unitaire</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900 dark:text-slate-200">Stock</th>
-                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                    <span class="sr-only">Actions</span>
-                </th>
+                <th scope="col" class="px-3 py-3.5 text-left text-[10px] font-bold uppercase tracking-widest text-mystic-900/40 dark:text-mystic-100/30 w-16">Image</th>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-[10px] font-bold uppercase tracking-widest text-mystic-900/40 dark:text-mystic-100/30 sm:pl-6">Nom du produit</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-[10px] font-bold uppercase tracking-widest text-mystic-900/40 dark:text-mystic-100/30">Catégories</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-[10px] font-bold uppercase tracking-widest text-mystic-900/40 dark:text-mystic-100/30">Prix HT</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-[10px] font-bold uppercase tracking-widest text-mystic-900/40 dark:text-mystic-100/30">Stock</th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6"><span class="sr-only">Actions</span></th>
             </tr>
         </thead>
-        <tbody class="divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-800">
+        <tbody class="divide-y divide-arcane-700/30 bg-arcane-800">
             <?php if (empty($products)): ?>
                 <tr>
-                    <td colspan="6" class="py-8 text-center text-sm text-slate-500 dark:text-slate-400">Aucun produit dans le catalogue.</td>
+                    <td colspan="6" class="py-10 px-6">
+                        <?php render_component('alert', [
+                            'type'    => 'info',
+                            'message' => 'Aucun produit dans le catalogue.',
+                        ]); ?>
+                    </td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($products as $product): ?>
-                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                    <?php
+                    $stock = (int)$product['stock'];
+                    $stockVariant = $stock === 0 ? 'danger' : ($stock <= 10 ? 'warning' : 'success');
+                    ?>
+                    <tr class="hover:bg-arcane-700/20 transition-colors">
 
                         <td class="whitespace-nowrap px-3 py-4">
                             <?php if (!empty($product['image_path'])): ?>
-                                <img src="<?= htmlspecialchars($product['image_path']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="h-10 w-10 rounded-md object-cover ring-1 ring-slate-200 dark:ring-slate-700 shadow-sm">
+                                <img src="<?= htmlspecialchars($product['image_path'], ENT_QUOTES, 'UTF-8') ?>"
+                                     alt="<?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>"
+                                     class="h-10 w-10 rounded-lg object-cover ring-1 ring-arcane-700 shadow-sm">
                             <?php else: ?>
-                                <div class="h-10 w-10 rounded-md bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700">
+                                <div class="h-10 w-10 rounded-lg bg-arcane-900/60 border border-arcane-700 flex items-center justify-center text-arcane-700">
                                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
@@ -52,36 +65,49 @@
                             <?php endif; ?>
                         </td>
 
-                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 dark:text-slate-100 sm:pl-6">
-                            <?= htmlspecialchars($product['name']) ?>
+                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-mystic-900 dark:text-mystic-100 sm:pl-6">
+                            <?= htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8') ?>
                         </td>
 
-                        <td class="px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                        <td class="px-3 py-4 text-sm">
                             <?php if (!empty($productCategories[$product['id']])): ?>
                                 <div class="flex flex-wrap gap-1">
                                     <?php foreach ($productCategories[$product['id']] as $catName): ?>
-                                        <span class="inline-flex items-center rounded-md bg-purple-50 px-2 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-700/10 dark:bg-purple-900/30 dark:text-purple-400">
-                                            <?= htmlspecialchars($catName) ?>
-                                        </span>
+                                        <?php render_component('badge', ['text' => $catName, 'variant' => 'mystic', 'size' => 'sm']); ?>
                                     <?php endforeach; ?>
                                 </div>
                             <?php else: ?>
-                                <span class="text-slate-400 dark:text-slate-500 italic text-xs">Aucune</span>
+                                <span class="text-mystic-900/30 dark:text-mystic-100/25 italic text-xs">Aucune</span>
                             <?php endif; ?>
                         </td>
 
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500 dark:text-slate-400">
+                        <td class="whitespace-nowrap px-3 py-4 text-sm font-medium text-mystic-500">
                             <?= number_format($product['price'], 2, ',', ' ') ?> €
                         </td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm">
-                            <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium <?= $product['stock'] > 0 ? 'bg-green-50 text-green-700 ring-1 ring-inset ring-green-600/20 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/10 dark:bg-red-900/30 dark:text-red-400' ?>">
-                                <?= htmlspecialchars($product['stock']) ?>
-                            </span>
+
+                        <td class="whitespace-nowrap px-3 py-4">
+                            <?php render_component('badge', ['text' => (string)$stock, 'variant' => $stockVariant, 'size' => 'sm']); ?>
                         </td>
+
                         <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                            <a href="/pages/admin/products/products_edit.php?id=<?= (int)$product['id'] ?>" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-4">Modifier</a>
-                            <button onclick="openDeleteModal(<?= (int)$product['id'] ?>)" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300">Supprimer</button>
+                            <?php render_component('button', [
+                                'type'       => 'a',
+                                'variant'    => 'ghost',
+                                'size'       => 'sm',
+                                'href'       => '/pages/admin/products/products_edit.php?id=' . (int)$product['id'],
+                                'label'      => 'Modifier',
+                                'extraClass' => 'text-mystic-500 hover:text-mystic-400 mr-4',
+                            ]); ?>
+                            <?php render_component('button', [
+                                'type'       => 'button',
+                                'variant'    => 'none',
+                                'size'       => 'sm',
+                                'label'      => 'Supprimer',
+                                'onclick'    => 'openDeleteModal(' . (int)$product['id'] . ')',
+                                'extraClass' => 'text-arcane-500 hover:text-arcane-500/70 font-medium',
+                            ]); ?>
                         </td>
+
                     </tr>
                 <?php endforeach; ?>
             <?php endif; ?>
@@ -90,14 +116,14 @@
 </div>
 
 <?php render_component('modal', [
-    'id' => 'deleteProductModal',
-    'title' => 'Supprimer le produit',
-    'body' => 'Êtes-vous sûr de vouloir retirer ce produit du catalogue ? Il ne sera plus visible par les clients.',
+    'id'         => 'deleteProductModal',
+    'title'      => 'Supprimer le produit',
+    'body'       => 'Êtes-vous sûr de vouloir retirer ce produit du catalogue ? Il ne sera plus visible par les clients.',
     'actionText' => 'Supprimer',
-    'actionUrl' => '/pages/admin/products/products_delete.php',
-    'theme' => 'danger',
-    'isPost' => true,
-    'csrfToken' => $_SESSION['csrf_token'] ?? ''
+    'actionUrl'  => '/pages/admin/products/products_delete.php',
+    'theme'      => 'danger',
+    'isPost'     => true,
+    'csrfToken'  => $_SESSION['csrf_token'] ?? '',
 ]); ?>
 
 <script>

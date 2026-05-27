@@ -1,39 +1,61 @@
-<div class="sm:flex sm:items-center sm:justify-between mb-8">
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
     <div>
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100">Gestion des Catégories</h1>
-        <p class="mt-2 text-sm text-slate-700 dark:text-slate-400">Gérez les catégories pour organiser votre catalogue de produits.</p>
+        <?php render_component('title', ['text' => 'Gestion des Catégories', 'level' => 1]); ?>
+        <p class="mt-1 text-sm text-mystic-900/60 dark:text-mystic-100/50">
+            Organisez votre catalogue de produits par catégories.
+        </p>
     </div>
-    <div class="mt-4 sm:mt-0">
-        <a href="/pages/admin/categories/categories_create.php" class="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition">
-            Ajouter une catégorie
-        </a>
-    </div>
+    <?php render_component('button', [
+        'type'    => 'a',
+        'href'    => '/pages/admin/categories/categories_create.php',
+        'label'   => 'Ajouter une catégorie',
+        'variant' => 'primary',
+        'size'    => 'sm',
+    ]); ?>
 </div>
 
-<div class="bg-white dark:bg-slate-800 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 sm:rounded-lg overflow-hidden transition-colors">
-    <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
-        <thead class="bg-slate-50 dark:bg-slate-900/50">
+<div class="bg-arcane-800 rounded-xl border border-arcane-700 overflow-hidden">
+    <table class="min-w-full divide-y divide-arcane-700/50">
+        <thead class="bg-arcane-900/50">
             <tr>
-                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-200 sm:pl-6">Nom de la catégorie</th>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-[10px] font-bold uppercase tracking-widest text-mystic-900/40 dark:text-mystic-100/30 sm:pl-6">
+                    Nom de la catégorie
+                </th>
                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                     <span class="sr-only">Actions</span>
                 </th>
             </tr>
         </thead>
-        <tbody class="divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-800">
+        <tbody class="divide-y divide-arcane-700/30 bg-arcane-800">
             <?php if (empty($categories)): ?>
                 <tr>
-                    <td colspan="2" class="py-8 text-center text-sm text-slate-500 dark:text-slate-400">Aucune catégorie n'a été créée pour le moment.</td>
+                    <td colspan="2" class="py-10 px-6">
+                        <?php render_component('alert', [
+                            'type'    => 'info',
+                            'message' => "Aucune catégorie n'a été créée pour le moment.",
+                        ]); ?>
+                    </td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($categories as $category): ?>
-                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
-                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 dark:text-slate-100 sm:pl-6">
-                            <?= htmlspecialchars($category['name']) ?>
+                    <tr class="hover:bg-arcane-700/20 transition-colors">
+                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-mystic-900 dark:text-mystic-100 sm:pl-6">
+                            <?= htmlspecialchars($category['name'], ENT_QUOTES, 'UTF-8') ?>
                         </td>
                         <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                            <a href="/pages/admin/categories/categories_edit.php?id=<?= $category['id'] ?>" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 mr-4">Modifier</a>
-                            <button onclick="openDeleteModal(<?= $category['id'] ?>)" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300">Supprimer</button>
+                            <?php render_component('button', [
+                                'type'       => 'a',
+                                'href'       => '/pages/admin/categories/categories_edit.php?id=' . (int)$category['id'],
+                                'variant'    => 'none',
+                                'extraClass' => 'text-mystic-500 hover:text-mystic-400 font-medium transition-colors mr-4',
+                                'label'      => 'Modifier',
+                            ]) ?>
+                            <?php render_component('button', [
+                                'variant'    => 'none',
+                                'onclick'    => 'openDeleteModal(' . (int)$category['id'] . ')',
+                                'extraClass' => 'text-arcane-500 hover:text-arcane-500/70 font-medium transition-colors',
+                                'label'      => 'Supprimer',
+                            ]) ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -42,14 +64,13 @@
     </table>
 </div>
 
-<!-- Modal pour valider le soft delete -->
 <?php render_component('modal', [
-    'id' => 'deleteCategoryModal',
-    'title' => 'Supprimer la catégorie',
-    'body' => 'Êtes-vous sûr ? Les produits qui étaient liés à cette catégorie ne seront pas supprimés, mais perdront ce classement.',
+    'id'         => 'deleteCategoryModal',
+    'title'      => 'Supprimer la catégorie',
+    'body'       => 'Êtes-vous sûr ? Les produits liés à cette catégorie ne seront pas supprimés, mais perdront ce classement.',
     'actionText' => 'Supprimer',
-    'actionUrl' => '#',
-    'theme' => 'danger'
+    'actionUrl'  => '#',
+    'theme'      => 'danger',
 ]); ?>
 
 <script>
