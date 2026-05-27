@@ -21,6 +21,7 @@ $onclick    = $onclick ?? '';
 $disabled   = $disabled ?? false;
 $title      = $title ?? '';
 $content    = $content ?? null;
+$rawHtml    = $rawHtml ?? false;
 
 $baseStyles = $disabled
     ? 'inline-flex items-center justify-center font-semibold rounded-lg opacity-40 cursor-not-allowed select-none'
@@ -58,6 +59,6 @@ $classes = $baseStyles . ' ' . ($variants[$variant] ?? $variants['primary']) . '
         <?= $onclick ? 'onclick="' . htmlspecialchars($onclick, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
         <?= $title ? 'title="' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '"' : '' ?>
         <?= $disabled ? 'disabled aria-disabled="true"' : '' ?>>
-        <?= $content !== null ? $content : htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>
+        <?= ($content !== null && $rawHtml) ? $content : htmlspecialchars($content ?? $label, ENT_QUOTES, 'UTF-8') ?>
     </button>
 <?php endif; ?>

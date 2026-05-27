@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../bootstrap.php';
 require_alias('@/helpers/db.php');
+require_alias('`@/helpers/view.php`');
 
 session_start();
 
@@ -29,7 +30,12 @@ if ($productId > 0 && isset($_SESSION['cart'][$productId])) {
     $product = $stmt->fetch();
 
     if ($product) {
-        $_SESSION['cart'][$productId] = min($quantity, (int)$product['stock']);
+        $stock = (int)$product['stock'];
+        if ($stock <= 0) {
+            unset($_SESSION['cart'][$productId]);
+        } else {
+            $_SESSION['cart'][$productId] = min($quantity, $stock);
+        }
     }
 }
 

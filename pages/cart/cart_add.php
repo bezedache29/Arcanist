@@ -42,8 +42,13 @@ if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
 
-$currentQty                    = $_SESSION['cart'][$productId] ?? 0;
-$_SESSION['cart'][$productId] = min($currentQty + $quantity, (int)$product['stock']);
+$currentQty = $_SESSION['cart'][$productId] ?? 0;
+$stock = (int)$product['stock'];
+if ($stock <= 0) {
+    header('Location: /pages/shop.php');
+    exit;
+}
+$_SESSION['cart'][$productId] = min((int)$currentQty + $quantity, $stock);
 
 // Redirection sécurisée : on n'accepte que les URLs internes connues
 $allowed = ['/pages/shop.php', '/pages/cart/cart.php'];

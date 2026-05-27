@@ -90,14 +90,22 @@
                         </td>
 
                         <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                            <a href="/pages/admin/products/products_edit.php?id=<?= (int)$product['id'] ?>"
-                               class="text-mystic-500 hover:text-mystic-400 font-medium transition-colors mr-4">
-                                Modifier
-                            </a>
-                            <button onclick="openDeleteModal(<?= (int)$product['id'] ?>)"
-                                    class="text-arcane-500 hover:text-arcane-500/70 font-medium transition-colors">
-                                Supprimer
-                            </button>
+                            <?php render_component('button', [
+                                'type'       => 'a',
+                                'variant'    => 'ghost',
+                                'size'       => 'sm',
+                                'href'       => '/pages/admin/products/products_edit.php?id=' . (int)$product['id'],
+                                'label'      => 'Modifier',
+                                'extraClass' => 'text-mystic-500 hover:text-mystic-400 mr-4',
+                            ]); ?>
+                            <?php render_component('button', [
+                                'type'       => 'button',
+                                'variant'    => 'none',
+                                'size'       => 'sm',
+                                'label'      => 'Supprimer',
+                                'onclick'    => 'openDeleteModal(' . (int)$product['id'] . ')',
+                                'extraClass' => 'text-arcane-500 hover:text-arcane-500/70 font-medium',
+                            ]); ?>
                         </td>
 
                     </tr>

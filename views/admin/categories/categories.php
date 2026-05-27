@@ -43,14 +43,19 @@
                             <?= htmlspecialchars($category['name'], ENT_QUOTES, 'UTF-8') ?>
                         </td>
                         <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                            <a href="/pages/admin/categories/categories_edit.php?id=<?= (int)$category['id'] ?>"
-                               class="text-mystic-500 hover:text-mystic-400 font-medium transition-colors mr-4">
-                                Modifier
-                            </a>
-                            <button onclick="openDeleteModal(<?= (int)$category['id'] ?>)"
-                                    class="text-arcane-500 hover:text-arcane-500/70 font-medium transition-colors">
-                                Supprimer
-                            </button>
+                            <?php render_component('button', [
+                                'type'       => 'a',
+                                'href'       => '/pages/admin/categories/categories_edit.php?id=' . (int)$category['id'],
+                                'variant'    => 'none',
+                                'extraClass' => 'text-mystic-500 hover:text-mystic-400 font-medium transition-colors mr-4',
+                                'label'      => 'Modifier',
+                            ]) ?>
+                            <?php render_component('button', [
+                                'variant'    => 'none',
+                                'onclick'    => 'openDeleteModal(' . (int)$category['id'] . ')',
+                                'extraClass' => 'text-arcane-500 hover:text-arcane-500/70 font-medium transition-colors',
+                                'label'      => 'Supprimer',
+                            ]) ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
